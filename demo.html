@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Video to Canvas Player</title>
+    <!-- Using Tailwind CSS for styling -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- 
+      Loading the script here, as you modified.
+      No type="module" needed.
+    -->
+    <script src="canvas-video-player.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        
+        /* All player-specific styles have been moved into the
+          canvas-video-player.js class or are defined there.
+          We just need the styles for our custom sliders here,
+          as they are dynamically injected by the class.
+        */
+
+        /* Custom styles for the timeline and volume sliders */
+        input[type="range"].slider {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 100%;
+            height: 6px;
+            background: #4a5568; /* gray-600 */
+            border-radius: 99px;
+            outline: none;
+            opacity: 0.9;
+            transition: opacity .2s;
+            cursor: pointer;
+        }
+        input[type="range"].slider:hover {
+            opacity: 1;
+        }
+        
+        /* Thumb styles for WebKit (Chrome, Safari) */
+        input[type="range"].slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 16px;
+            height: 16px;
+            background: #ffffff; /* white */
+            border-radius: 50%;
+            cursor: pointer;
+        }
+        
+        /* Thumb styles for Mozilla (Firefox) */
+        input[type="range"].slider::-moz-range-thumb {
+            width: 16px;
+            height: 16px;
+            background: #ffffff; /* white */
+            border-radius: 50%;
+            cursor: pointer;
+            border: none; /* Remove default border */
+        }
+        
+        /* Styles for the dynamically injected elements */
+        .time-display {
+            font-size: 0.875rem; /* 14px */
+            color: #d1d5db; /* gray-300 */
+            min-width: 90px;
+            text-align: center;
+        }
+
+        .control-button {
+            background: none;
+            border: none;
+            color: white;
+            cursor: pointer;
+            padding: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .control-button:hover {
+            color: #9ca3af; /* gray-400 */
+        }
+        
+        .player-controls {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 0.75rem 1rem;
+        }
+
+        .volume-controls {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            width: 120px;
+        }
+    </style>
+</head>
+<body class="bg-gray-900 text-gray-100 flex items-center justify-center min-h-screen p-4 sm:p-6 md:p-8">
+
+    <!-- MODIFIED: Changed max-w-5xl to max-w-7xl to make the layout wider -->
+    <div class="bg-gray-800 p-6 sm:p-8 rounded-2xl shadow-2xl w-full max-w-7xl">
+        <h1 class="text-2xl sm:text-3xl font-bold text-center text-white mb-6">Video to Canvas Player</h1>
+
+        <!-- NEW: Responsive grid layout -->
+        <!-- MODIFIED: Increased gap from lg:gap-8 to lg:gap-12 -->
+        <div class="grid grid-cols-1 lg:grid-cols-3 lg:gap-12">
+
+            <!-- COLUMN 1: Inputs -->
+            <!-- On large screens, spans 1 column. Stacks vertically with space. -->
+            <div class="lg:col-span-1 space-y-6">
+                <!-- Input Section -->
+                <div>
+                    <label for="video-url" class="block text-sm font-medium text-gray-300 mb-2">Video URL (MP4)</label>
+                    <div class="flex flex-col sm:flex-row gap-2">
+                        <input type="text" id="video-url" class="flex-grow bg-gray-700 text-white border border-gray-600 rounded-lg px-4 py-2 focus:ring-2 focus:ring-blue-500 focus:outline-none" placeholder="Enter .mp4 URL here...">
+                        <button id="load-button" class="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-5 rounded-lg transition-colors duration-200">
+                            Load
+                        </button>
+                    </div>
+                    <p class="text-xs text-gray-400 mt-2">
+                        Note: Video must be from a <span class="font-semibold">CORS-enabled</span> server. You can use a sample URL.
+                    </p>
+                </div>
+
+                <!-- Watermark Input -->
+                <div>
+                    <label for="watermark-text" class="block text-sm font-medium text-gray-300 mb-2">Watermark Text (Optional)</label>
+                    <input type="text" id="watermark-text" class="flex-grow w-full bg-gray-700 text-white border border-gray-600 rounded-lg px-4 py-2 focus:ring-2 focus:ring-blue-500 focus:outline-none" placeholder="Enter watermark text...">
+                </div>
+            </div>
+
+            <!-- COLUMN 2: Player -->
+            <!-- On large screens, spans 2 columns. On mobile, adds top margin. -->
+            <div class="lg:col-span-2 mt-6 lg:mt-0">
+                <!-- 
+                  Player Section
+                  This div is now just a container. The class will build the player inside it.
+                -->
+                <div id="player-container" class="bg-gray-900 rounded-lg overflow-hidden border border-gray-700">
+                     <!-- The CanvasVideoPlayer will be injected here -->
+                     <div class="w-full h-auto aspect-video bg-black flex items-center justify-center text-gray-500">
+                        <p>Player will be initialized here.</p>
+                     </div>
+                </div>
+            </div>
+
+            <!-- ROW 2: Explanation -->
+            <!-- Spans all 3 columns on large screens. Adds top margin on all screens. -->
+            <div class="lg:col-span-3 mt-6">
+                <!-- Status & Explanation (Simplified) -->
+                <div class="p-4 bg-gray-700 rounded-lg">
+                    <h3 class="font-semibold text-lg mb-2">How this works:</h3>
+                    <p class="text-sm text-gray-300 mb-4">
+                        This page imports and uses a <code>CanvasVideoPlayer</code> class from <code>canvas-video-player.js</code>. The class handles all logic for drawing to the canvas, syncing audio, and managing the custom controls.
+                    </p>
+                    
+                    <h4 class="font-semibold text-md mb-2">Security & Obfuscation Features:</h4>
+                    <ul class="list-disc list-inside text-sm text-gray-300 space-y-2">
+                        <li>
+                            <strong>Custom Controls:</strong> By replacing the browser's default video/audio controls, we remove the "Download" and "Picture-in-Picture" buttons, giving us full control over the user's interaction.
+                        </li>
+                        <li>
+                            <strong>Blob URL Loading:</strong> The <code>load()</code> method fetches the video file in JavaScript and loads it into the player as a <code>blob:</code> URL. This prevents anyone from simply right-clicking, "Inspect Element," and finding the direct <code>.mp4</code> URL in the HTML.
+                        </li>
+                        <li>
+                            <strong>Disclaimer:</strong> This method deters casual users. A tech-savvy user can still open the browser's "Network" tab to see the original file being downloaded. True protection requires server-side solutions like expiring URLs or encrypted streaming (HLS/DASH).
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+        </div> <!-- End Grid -->
+
+    </div>
+
+    <!-- 
+      This script tag is no longer type="module"
+    -->
+    <script>
+
+        // Get references to our UI controls
+        const videoUrlInput = document.getElementById('video-url');
+        const loadButton = document.getElementById('load-button');
+        const watermarkInput = document.getElementById('watermark-text');
+        const playerContainer = document.getElementById('player-container');
+
+        // This will hold our player instance
+        let player = null;
+
+        // Set a default sample URL
+        videoUrlInput.value = 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4';
+
+        // Load Button Listener
+        loadButton.addEventListener('click', () => {
+            const videoUrl = videoUrlInput.value;
+            const watermarkText = watermarkInput.value;
+            if (!videoUrl) return;
+
+            // If a player already exists, destroy it before creating a new one
+            if (player) {
+                player.destroy();
+            }
+
+            // Create a new player instance
+            player = new CanvasVideoPlayer(playerContainer, {
+                videoUrl: videoUrl,
+                watermarkText: watermarkText
+            });
+            
+            // NOTE: The 'load' method is now async, but we don't
+            // need to 'await' it here, as it handles its
+            // own loading states internally.
+        });
+
+        // Watermark Input Listener
+        watermarkInput.addEventListener('input', () => {
+            // If the player exists, update its watermark text in real-time
+            if (player) {
+                player.setWatermark(watermarkInput.value);
+            }
+        });
+
+    </script>
+</body>
+</html>
