@@ -19,7 +19,15 @@ The player renders video frames to a `<canvas>` element while playing the audio 
 
 ### 1. Include the Files
 
-Add the `canvas-video-player.js` file to your project. You also need a basic HTML structure.
+Add the `canvas-video-player.js` file to your project. 
+
+```html
+
+<script src="https://cdn.jsdelivr.net/gh/hasielhassan/CanvasVideoPlayerJS@v0.0.2/canvas-video-player.js"></script>
+
+```
+
+You also need a basic HTML structure.
 
 ```html
 <!DOCTYPE html>

@@ -128,7 +128,8 @@
                 <!-- Watermark Input -->
                 <div>
                     <label for="watermark-text" class="block text-sm font-medium text-gray-300 mb-2">Watermark Text (Optional)</label>
-                    <input type="text" id="watermark-text" class="flex-grow w-full bg-gray-700 text-white border border-gray-600 rounded-lg px-4 py-2 focus:ring-2 focus:ring-blue-500 focus:outline-none" placeholder="Enter watermark text...">
+                    <!-- MODIFIED: Changed from input to textarea for multi-line support -->
+                    <textarea id="watermark-text" rows="3" class="flex-grow w-full bg-gray-700 text-white border border-gray-600 rounded-lg px-4 py-2 focus:ring-2 focus:ring-blue-500 focus:outline-none resize-none" placeholder="Enter watermark text...&#10;Use Enter for new lines"></textarea>
                 </div>
             </div>
 

@@ -209,7 +209,7 @@ class CanvasVideoPlayer {
      * Loads a new video into the player.
      * @param {string} videoUrl - The URL of the video to load.
      */
-    async load(videoUrl) { // <-- Make this function async
+    async load(videoUrl) { 
         if (!videoUrl) return;
 
         this.videoUrl = videoUrl;
@@ -318,11 +318,15 @@ class CanvasVideoPlayer {
         this.ctx.drawImage(this.videoSource, 0, 0, this.canvas.width, this.canvas.height);
 
         // 2. Get watermark text
-        const watermarkText = this.watermarkText.trim();
-        if (!watermarkText) return;
+        const rawText = this.watermarkText.trim();
+        if (!rawText) return;
+
+        // --- MULTI-LINE SUPPORT ---
+        // Split text based on newlines
+        const lines = rawText.split('\n');
 
         // 3. Set initial watermark styles
-        const fontSize = this.canvas.height * 0.15; // 15% of video height
+        let fontSize = this.canvas.height * 0.15; // 15% of video height base size
         this.ctx.font = `bold ${fontSize}px 'Inter', sans-serif`;
         this.ctx.fillStyle = 'white';
         this.ctx.textAlign = 'center';
@@ -330,19 +334,57 @@ class CanvasVideoPlayer {
 
         // 4. --- Watermark Scaling Logic ---
         const maxWidth = this.canvas.width * 0.9; // Max 90% of canvas width
-        const textMetrics = this.ctx.measureText(watermarkText);
-        
-        if (textMetrics.width > maxWidth) {
-            // Text is too wide, scale it down
-            const scaleFactor = maxWidth / textMetrics.width;
-            const scaledFontSize = fontSize * scaleFactor;
-            this.ctx.font = `bold ${scaledFontSize}px 'Inter', sans-serif`;
+        const maxHeight = this.canvas.height * 0.9; // Max 90% of canvas height
+
+        // A. Width Scaling: Find the widest line
+        let maxLineWidth = 0;
+        lines.forEach(line => {
+            const metrics = this.ctx.measureText(line);
+            if (metrics.width > maxLineWidth) {
+                maxLineWidth = metrics.width;
+            }
+        });
+
+        // Scale down if widest line is too wide
+        if (maxLineWidth > maxWidth) {
+            const scaleFactor = maxWidth / maxLineWidth;
+            fontSize = fontSize * scaleFactor;
         }
+
+        // B. Height Scaling: Ensure total block fits vertically
+        // Recalculate font based on width change first
+        this.ctx.font = `bold ${fontSize}px 'Inter', sans-serif`;
+        
+        let lineHeight = fontSize * 1.2; // 120% line height
+        let totalHeight = lines.length * lineHeight;
+
+        if (totalHeight > maxHeight) {
+            const scaleFactor = maxHeight / totalHeight;
+            fontSize = fontSize * scaleFactor;
+            // Recalculate metrics with final font size
+            lineHeight = fontSize * 1.2;
+            totalHeight = lines.length * lineHeight;
+        }
+        
+        // Apply final font size
+        this.ctx.font = `bold ${fontSize}px 'Inter', sans-serif`;
+
         // --- End Scaling Logic ---
 
-        // 5. Draw the watermark
+        // 5. Draw the watermark lines
         this.ctx.globalAlpha = 0.25; // 75% transparent
-        this.ctx.fillText(watermarkText, this.canvas.width / 2, this.canvas.height / 2);
+        
+        // Calculate starting Y position to center the block
+        // We want the center of the text block to be at canvas.height/2
+        // Top of block = CenterY - (TotalHeight / 2)
+        // But since textBaseline is 'middle', the first line should be drawn at:
+        // TopOfBlock + (LineHeight / 2)
+        let currentY = (this.canvas.height / 2) - (totalHeight / 2) + (lineHeight / 2);
+
+        lines.forEach(line => {
+            this.ctx.fillText(line, this.canvas.width / 2, currentY);
+            currentY += lineHeight;
+        });
 
         // 6. Reset alpha
         this.ctx.globalAlpha = 1.0;
