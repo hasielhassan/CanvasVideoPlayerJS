@@ -210,6 +210,12 @@ export class CanvasVideoPlayer {
 
         // Resize
         window.addEventListener('resize', this._handleResize);
+
+        // Disable Context Menu (Right-click)
+        this.wrapper.addEventListener('contextmenu', (e) => {
+            e.preventDefault();
+            return false;
+        });
     }
 
     async load(url) {
