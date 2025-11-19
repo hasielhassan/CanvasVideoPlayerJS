@@ -21827,8 +21827,12 @@ class zd {
       this.isDraggingTimeline || (this.timeline.value = this.videoSource.currentTime, this._updateTimeDisplay());
     }, this.videoSource.onloadedmetadata = () => {
       this.timeline.max = this.videoSource.duration, this._updateTimeDisplay(), this._resizeCanvas();
+    }, this.videoSource.onseeked = () => {
+      this.isPlaying || this._drawFrame(!0);
     }, this.timeline.oninput = () => {
-      this.isDraggingTimeline = !0, this._updateTimeDisplay(this.timeline.value);
+      this.isDraggingTimeline = !0;
+      const e = this.timeline.value;
+      this.videoSource.currentTime = e, this._updateTimeDisplay(e);
     }, this.timeline.onchange = () => {
       this.isDraggingTimeline = !1, this.videoSource.currentTime = this.timeline.value;
     }, this.muteBtn.onclick = () => this.toggleMute(), this.unmuteBtn.onclick = () => this.toggleMute(), this.volumeSlider.oninput = () => {
@@ -21895,13 +21899,24 @@ class zd {
   _drawFrame(e = !1) {
     if (!this.ctx) return;
     const t = this.canvas.width, s = this.canvas.height;
-    this.videoSource.readyState >= 2 ? this.ctx.drawImage(this.videoSource, 0, 0, t, s) : (this.ctx.fillStyle = "black", this.ctx.fillRect(0, 0, t, s)), this.options.watermarkText && this._drawWatermark(t, s), !e && this.isPlaying ? this.animationFrameId = requestAnimationFrame(() => this._drawFrame(!1)) : this.animationFrameId = null;
+    if (this.ctx.fillStyle = "black", this.ctx.fillRect(0, 0, t, s), this.videoSource.readyState >= 2) {
+      const i = this.videoSource.videoWidth, r = this.videoSource.videoHeight, n = Math.min(t / i, s / r), o = i * n, c = r * n, l = (t - o) / 2, h = (s - c) / 2;
+      this.ctx.drawImage(this.videoSource, l, h, o, c);
+    } else
+      this.videoSource.readyState < 1 && (this.ctx.fillStyle = "black", this.ctx.fillRect(0, 0, t, s));
+    this.options.watermarkText && this._drawWatermark(t, s), !e && this.isPlaying ? this.animationFrameId = requestAnimationFrame(() => this._drawFrame(!1)) : this.animationFrameId = null;
   }
   _drawWatermark(e, t) {
-    const s = this.options.watermarkText;
+    const i = this.options.watermarkText.split(`
+`);
     this.ctx.save(), this.ctx.globalAlpha = 0.3, this.ctx.fillStyle = "white", this.ctx.textAlign = "center", this.ctx.textBaseline = "middle";
-    const i = Math.min(e, t) * 0.1;
-    this.ctx.font = `bold ${i}px Inter, sans-serif`, this.ctx.fillText(s, e / 2, t / 2), this.ctx.restore();
+    const r = Math.min(e, t) * 0.08;
+    this.ctx.font = `bold ${r}px Inter, sans-serif`;
+    const n = r * 1.2, o = i.length * n;
+    let c = (t - o) / 2 + n / 2;
+    i.forEach((l, h) => {
+      this.ctx.fillText(l, e / 2, c + h * n);
+    }), this.ctx.restore();
   }
 }
 typeof window < "u" && (window.CanvasVideoPlayer = zd);
