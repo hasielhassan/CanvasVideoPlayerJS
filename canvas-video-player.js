@@ -1,6 +1,6 @@
 /**
  * CanvasVideoPlayer
- * A class to load an MP4 video, draw it to a canvas with an optional
+ * A class to load an MP4 video, draw it to a canvas with an optional 
  * watermark, and provide custom, secure playback controls.
  */
 class CanvasVideoPlayer {
@@ -22,7 +22,7 @@ class CanvasVideoPlayer {
         this.ctx = null;
         this.animationFrameId = null;
         this.isMuted = false;
-        this.blobUrl = null; // <-- Add this to store the blob URL
+        this.blobUrl = null; 
 
         // --- DOM Elements ---
         this.playerWrapper = null;
@@ -56,11 +56,17 @@ class CanvasVideoPlayer {
         this.container.innerHTML = ''; // Clear container
 
         this.playerWrapper = document.createElement('div');
-        this.playerWrapper.className = 'bg-gray-900 rounded-lg overflow-hidden border border-gray-700';
+        this.playerWrapper.className = 'bg-gray-900 rounded-lg overflow-hidden border border-gray-700 relative';
 
         // 1. Canvas
         this.canvas = document.createElement('canvas');
         this.canvas.className = 'w-full h-auto aspect-video bg-black';
+        // Set a default HD resolution for the loading screen so text isn't pixelated
+        this.canvas.width = 1280;
+        this.canvas.height = 720;
+        
+        // Prevent default context menu on canvas
+        this.canvas.addEventListener('contextmenu', e => e.preventDefault());
         this.ctx = this.canvas.getContext('2d');
 
         // 2. Hidden Media Elements
@@ -139,7 +145,7 @@ class CanvasVideoPlayer {
 
     /**
      * Creates SVG icons for the player controls.
-     * @param {string} iconName - Name of the icon to create.
+     * @param {string} iconName
      * @private
      */
     _createSvg(iconName) {
@@ -182,7 +188,13 @@ class CanvasVideoPlayer {
      * @private
      */
     _addListeners() {
-        // Video/Audio Element Listeners
+        // 1. Global Player Listeners
+        this.playerWrapper.addEventListener('contextmenu', (e) => {
+            e.preventDefault();
+            return false;
+        });
+
+        // 2. Video/Audio Element Listeners
         this.videoSource.addEventListener('loadeddata', this._handleLoadedData.bind(this));
         this.videoSource.addEventListener('error', this._handleMediaError.bind(this));
         
@@ -193,7 +205,7 @@ class CanvasVideoPlayer {
         this.audioSource.addEventListener('ended', this._handleEnded.bind(this));
         this.audioSource.addEventListener('volumechange', this._handleVolumeChange.bind(this));
 
-        // Custom Controls Listeners
+        // 3. Custom Controls Listeners
         this.playPauseBtn.addEventListener('click', this._togglePlay.bind(this));
         this.muteBtn.addEventListener('click', this._toggleMute.bind(this));
         
@@ -206,15 +218,15 @@ class CanvasVideoPlayer {
     // --- Public API Methods ---
 
     /**
-     * Loads a new video into the player.
-     * @param {string} videoUrl - The URL of the video to load.
+     * Loads a video from a URL with real-time progress tracking.
+     * @param {string} videoUrl 
      */
     async load(videoUrl) { 
         if (!videoUrl) return;
 
         this.videoUrl = videoUrl;
         
-        // Stop any current playback
+        // Stop animation and pause media
         if (this.animationFrameId) {
             cancelAnimationFrame(this.animationFrameId);
             this.animationFrameId = null;
@@ -222,32 +234,61 @@ class CanvasVideoPlayer {
         this.videoSource.pause();
         this.audioSource.pause();
 
-        // --- New Blob Loading Logic ---
         try {
-            // Let the user know we're buffering/downloading
-            this._handleLoadingStarted(); 
+            this._updateLoadingStatus("Initializing connection...", 0);
 
-            // Fetch the video data as a blob
+            // 1. Fetch headers to start the stream
             const response = await fetch(videoUrl);
             if (!response.ok) {
                 throw new Error(`HTTP error! status: ${response.status}`);
             }
-            const videoBlob = await response.blob();
 
-            // Clean up any old blob URL to prevent memory leaks
+            // 2. Setup the Stream Reader
+            const contentLength = response.headers.get('content-length');
+            const total = contentLength ? parseInt(contentLength, 10) : 0;
+            let loaded = 0;
+
+            const reader = response.body.getReader();
+            const chunks = []; // Array of Uint8Array chunks
+
+            // 3. Read the stream loop
+            while(true) {
+                const {done, value} = await reader.read();
+                
+                if (done) {
+                    break;
+                }
+
+                chunks.push(value);
+                loaded += value.length;
+
+                // 4. Update Status
+                if (total) {
+                    const percent = Math.floor((loaded / total) * 100);
+                    this._updateLoadingStatus("Preparing content...", percent);
+                } else {
+                    // Fallback if server doesn't send content-length
+                    const mbLoaded = (loaded / (1024 * 1024)).toFixed(1);
+                    this._updateLoadingStatus(`Preparing content... (${mbLoaded} MB)`, 50);
+                }
+            }
+
+            this._updateLoadingStatus("Finalizing...", 99);
+
+            // 5. Assemble the Blob (This can be heavy for 1GB+ files)
+            const videoBlob = new Blob(chunks, { type: 'video/mp4' });
+
+            // Cleanup previous blob if needed
             if (this.blobUrl) {
                 URL.revokeObjectURL(this.blobUrl);
             }
 
-            // Create a new blob URL
+            // Create new blob URL
             this.blobUrl = URL.createObjectURL(videoBlob);
 
-            // Set the src of our media elements to the blob URL
+            // Set the src
             this.videoSource.src = this.blobUrl;
             this.audioSource.src = this.blobUrl;
-            
-            // We can remove the "loading" message logic from here,
-            // as 'loadeddata' will handle it.
 
         } catch (error) {
             console.error('Error fetching or loading video:', error);
@@ -255,10 +296,6 @@ class CanvasVideoPlayer {
         }
     }
 
-    /**
-     * Updates the watermark text.
-     * @param {string} text - The new watermark text.
-     */
     setWatermark(text) {
         this.watermarkText = text || '';
         if (this.videoSource.paused && this.videoSource.src) {
@@ -266,9 +303,6 @@ class CanvasVideoPlayer {
         }
     }
 
-    /**
-     * Cleans up the player, removes listeners and DOM elements.
-     */
     destroy() {
         if (this.animationFrameId) {
             cancelAnimationFrame(this.animationFrameId);
@@ -276,15 +310,14 @@ class CanvasVideoPlayer {
         this.videoSource.pause();
         this.audioSource.pause();
 
-        // --- Add Blob Cleanup ---
+        // We ONLY revoke the URL on destroy (or when a new video is loaded)
+        // This prevents the "Not allowed to load local resource" error during playback.
         if (this.blobUrl) {
             URL.revokeObjectURL(this.blobUrl);
         }
 
-        // Remove all listeners (simplified example; for robust cleanup, remove each one)
         this.container.innerHTML = '';
         
-        // Nullify references
         this.videoSource = null;
         this.audioSource = null;
         this.canvas = null;
@@ -293,10 +326,6 @@ class CanvasVideoPlayer {
 
     // --- Drawing Methods ---
 
-    /**
-     * The main animation loop.
-     * @private
-     */
     _drawFrame() {
         if (!this.videoSource || this.videoSource.paused || this.videoSource.ended) {
             this.animationFrameId = null;
@@ -306,10 +335,6 @@ class CanvasVideoPlayer {
         this.animationFrameId = requestAnimationFrame(this._drawFrame);
     }
 
-    /**
-     * Draws the current video frame and the watermark (if any).
-     * @private
-     */
     _drawFrameWithWatermark() {
         if (!this.ctx || !this.canvas.width || !this.canvas.height) return;
 
@@ -322,21 +347,19 @@ class CanvasVideoPlayer {
         if (!rawText) return;
 
         // --- MULTI-LINE SUPPORT ---
-        // Split text based on newlines
         const lines = rawText.split('\n');
 
         // 3. Set initial watermark styles
-        let fontSize = this.canvas.height * 0.15; // 15% of video height base size
+        let fontSize = this.canvas.height * 0.15; 
         this.ctx.font = `bold ${fontSize}px 'Inter', sans-serif`;
         this.ctx.fillStyle = 'white';
         this.ctx.textAlign = 'center';
         this.ctx.textBaseline = 'middle';
 
         // 4. --- Watermark Scaling Logic ---
-        const maxWidth = this.canvas.width * 0.9; // Max 90% of canvas width
-        const maxHeight = this.canvas.height * 0.9; // Max 90% of canvas height
+        const maxWidth = this.canvas.width * 0.9; 
+        const maxHeight = this.canvas.height * 0.9; 
 
-        // A. Width Scaling: Find the widest line
         let maxLineWidth = 0;
         lines.forEach(line => {
             const metrics = this.ctx.measureText(line);
@@ -345,40 +368,28 @@ class CanvasVideoPlayer {
             }
         });
 
-        // Scale down if widest line is too wide
         if (maxLineWidth > maxWidth) {
             const scaleFactor = maxWidth / maxLineWidth;
             fontSize = fontSize * scaleFactor;
         }
 
-        // B. Height Scaling: Ensure total block fits vertically
-        // Recalculate font based on width change first
         this.ctx.font = `bold ${fontSize}px 'Inter', sans-serif`;
         
-        let lineHeight = fontSize * 1.2; // 120% line height
+        let lineHeight = fontSize * 1.2; 
         let totalHeight = lines.length * lineHeight;
 
         if (totalHeight > maxHeight) {
             const scaleFactor = maxHeight / totalHeight;
             fontSize = fontSize * scaleFactor;
-            // Recalculate metrics with final font size
             lineHeight = fontSize * 1.2;
             totalHeight = lines.length * lineHeight;
         }
         
-        // Apply final font size
         this.ctx.font = `bold ${fontSize}px 'Inter', sans-serif`;
 
-        // --- End Scaling Logic ---
-
         // 5. Draw the watermark lines
-        this.ctx.globalAlpha = 0.25; // 75% transparent
+        this.ctx.globalAlpha = 0.25; 
         
-        // Calculate starting Y position to center the block
-        // We want the center of the text block to be at canvas.height/2
-        // Top of block = CenterY - (TotalHeight / 2)
-        // But since textBaseline is 'middle', the first line should be drawn at:
-        // TopOfBlock + (LineHeight / 2)
         let currentY = (this.canvas.height / 2) - (totalHeight / 2) + (lineHeight / 2);
 
         lines.forEach(line => {
@@ -386,8 +397,65 @@ class CanvasVideoPlayer {
             currentY += lineHeight;
         });
 
-        // 6. Reset alpha
         this.ctx.globalAlpha = 1.0;
+    }
+
+    // --- Status Drawing Helper ---
+
+    /**
+     * Draws a loading status screen on the canvas with progress bar.
+     * @param {string} message - Text to display
+     * @param {number} percent - Progress percentage (0-100)
+     * @private
+     */
+    _updateLoadingStatus(message, percent) {
+        if (!this.ctx) return;
+
+        // Ensure we have decent dimensions even before video loads
+        if (this.canvas.width === 0 || this.canvas.height === 0) {
+            this.canvas.width = 1280;
+            this.canvas.height = 720;
+        }
+
+        const w = this.canvas.width;
+        const h = this.canvas.height;
+
+        // 1. Background
+        this.ctx.fillStyle = '#000000';
+        this.ctx.fillRect(0, 0, w, h);
+
+        // 2. Text
+        this.ctx.fillStyle = '#ffffff';
+        this.ctx.textAlign = 'center';
+        this.ctx.textBaseline = 'middle';
+        
+        // Scale font relative to canvas height
+        const fontSize = h * 0.05; // 5% of height
+        this.ctx.font = `${fontSize}px 'Inter', sans-serif`;
+        
+        this.ctx.fillText(message, w / 2, h / 2 - fontSize);
+
+        // 3. Progress Bar Background
+        const barWidth = w * 0.5; // 50% of screen width
+        const barHeight = h * 0.015; // 1.5% of screen height
+        const barX = (w - barWidth) / 2;
+        const barY = (h / 2) + (fontSize * 1.5);
+
+        this.ctx.fillStyle = '#333333';
+        this.ctx.fillRect(barX, barY, barWidth, barHeight);
+
+        // 4. Progress Bar Fill
+        if (percent > 0) {
+            const fillWidth = barWidth * (Math.min(percent, 100) / 100);
+            this.ctx.fillStyle = '#3b82f6'; // Tailwind Blue-500 hex
+            this.ctx.fillRect(barX, barY, fillWidth, barHeight);
+        }
+
+        // 5. Percentage Text
+        const smallFontSize = fontSize * 0.6;
+        this.ctx.font = `${smallFontSize}px 'Inter', sans-serif`;
+        this.ctx.fillStyle = '#9ca3af'; // Gray-400
+        this.ctx.fillText(`${Math.floor(percent)}%`, w / 2, barY + barHeight + smallFontSize);
     }
 
     // --- Internal Event Handlers ---
@@ -395,41 +463,43 @@ class CanvasVideoPlayer {
     _handleLoadedData() {
         this.canvas.width = this.videoSource.videoWidth;
         this.canvas.height = this.videoSource.videoHeight;
-        // The 'loadeddata' event now fires *after* the blob is loaded
-        // You might want a status message here
+        
+        // Just log, no drawing needed, the play command or seek will handle next draw
         console.log("Video data loaded and ready.");
+        
+        // Draw first frame shortly
         setTimeout(() => this._drawFrameWithWatermark(), 50);
-    }
-
-    _handleLoadingStarted() {
-        // You can add a loading spinner or message here
-        // For now, just log it.
-        console.log("Fetching video...");
-        // Clear the canvas
-        if (this.ctx) {
-            this.ctx.fillStyle = 'black';
-            this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
-            this.ctx.fillStyle = 'white';
-            this.ctx.textAlign = 'center';
-            this.ctx.fillText('Loading video...', this.canvas.width / 2, this.canvas.height / 2);
-        }
     }
 
     _handleMediaError(e) {
         console.error('Video Error:', this.videoSource ? this.videoSource.error : 'Unknown error');
-        // Display error on canvas
         if (this.ctx) {
+            const w = this.canvas.width;
+            const h = this.canvas.height;
+            
             this.ctx.fillStyle = 'black';
-            this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
-            this.ctx.fillStyle = 'red';
+            this.ctx.fillRect(0, 0, w, h);
+            
+            this.ctx.fillStyle = '#ef4444'; // Red
             this.ctx.textAlign = 'center';
-            this.ctx.fillText('Error loading video.', this.canvas.width / 2, this.canvas.height / 2);
+            this.ctx.textBaseline = 'middle';
+            const fontSize = h * 0.05;
+            this.ctx.font = `bold ${fontSize}px 'Inter', sans-serif`;
+            
+            this.ctx.fillText('Error loading content.', w / 2, h / 2);
+            
+            this.ctx.font = `${fontSize * 0.6}px 'Inter', sans-serif`;
+            this.ctx.fillStyle = '#9ca3af';
+            this.ctx.fillText('Check console for details.', w / 2, h / 2 + fontSize * 1.5);
         }
     }
 
     _handleLoadedMetadata() {
         this.timelineSlider.max = this.audioSource.duration;
         this.totalTimeEl.textContent = this._formatTime(this.audioSource.duration);
+
+        // REMOVED: URL.revokeObjectURL(this.blobUrl)
+        // We must keep the Blob URL valid for large files to prevent PIPELINE_ERROR_READ.
     }
 
     _handleTimeUpdate() {
