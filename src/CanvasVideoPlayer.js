@@ -352,14 +352,23 @@ export class CanvasVideoPlayer {
         const w = this.canvas.width;
         const h = this.canvas.height;
 
+        // Clear canvas (important for letterboxing)
+        this.ctx.fillStyle = 'black';
+        this.ctx.fillRect(0, 0, w, h);
+
         // Draw Video
         if (this.videoSource.readyState >= 2) {
-            // Draw video to fill canvas (stretch) - or implement 'contain' logic here
-            this.ctx.drawImage(this.videoSource, 0, 0, w, h);
-        } else {
-            // Loading/Black background
-            this.ctx.fillStyle = 'black';
-            this.ctx.fillRect(0, 0, w, h);
+            const vw = this.videoSource.videoWidth;
+            const vh = this.videoSource.videoHeight;
+
+            // Calculate scale to fit (contain)
+            const scale = Math.min(w / vw, h / vh);
+            const drawW = vw * scale;
+            const drawH = vh * scale;
+            const x = (w - drawW) / 2;
+            const y = (h - drawH) / 2;
+
+            this.ctx.drawImage(this.videoSource, x, y, drawW, drawH);
         }
 
         // Draw Watermark
@@ -376,6 +385,8 @@ export class CanvasVideoPlayer {
 
     _drawWatermark(w, h) {
         const text = this.options.watermarkText;
+        const lines = text.split('\n'); // Split by newline
+
         this.ctx.save();
         this.ctx.globalAlpha = 0.3;
         this.ctx.fillStyle = 'white';
@@ -383,13 +394,19 @@ export class CanvasVideoPlayer {
         this.ctx.textBaseline = 'middle';
 
         // Simple scaling font
-        const fontSize = Math.min(w, h) * 0.1;
+        const fontSize = Math.min(w, h) * 0.08; // Slightly smaller for multiline
         this.ctx.font = `bold ${fontSize}px Inter, sans-serif`;
 
-        // Draw in center
-        this.ctx.fillText(text, w / 2, h / 2);
+        const lineHeight = fontSize * 1.2;
+        const totalHeight = lines.length * lineHeight;
+        let startY = (h - totalHeight) / 2 + (lineHeight / 2);
 
-        // Optional: Tiled pattern could go here
+        lines.forEach((line, index) => {
+            this.ctx.fillText(line, w / 2, startY + (index * lineHeight));
+        });
+
         this.ctx.restore();
     }
+
+
 }
