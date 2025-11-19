@@ -140,12 +140,6 @@ export class CanvasVideoPlayer {
 
         this.controlsContainer.append(controlsRow);
 
-        // Append to wrapper or container based on layout? 
-        // Actually, for 'outside', it might be better to append to container, 
-        // but wrapper has overflow:hidden which might clip it if inside.
-        // Let's append to wrapper for overlay, and container for outside?
-        // Base CSS says wrapper has relative positioning.
-
         if (this.options.controlsLayout === 'outside') {
             this.wrapper.append(this.canvas, this.videoSource);
             this.container.append(this.wrapper, this.controlsContainer);
@@ -185,10 +179,20 @@ export class CanvasVideoPlayer {
             this._resizeCanvas(); // Ensure canvas matches video aspect ratio
         };
 
+        // NEW: Handle seeked event
+        this.videoSource.onseeked = () => {
+            if (!this.isPlaying) {
+                this._drawFrame(true);
+            }
+        };
+
         // Timeline
         this.timeline.oninput = () => {
             this.isDraggingTimeline = true;
-            this._updateTimeDisplay(this.timeline.value);
+            const time = this.timeline.value;
+            this.videoSource.currentTime = time;
+            this._updateTimeDisplay(time);
+            // Removed direct _drawFrame call here, relying on 'seeked' event
         };
         this.timeline.onchange = () => {
             this.isDraggingTimeline = false;
@@ -357,6 +361,7 @@ export class CanvasVideoPlayer {
         this.ctx.fillRect(0, 0, w, h);
 
         // Draw Video
+        // Check readyState: 2 = HAVE_CURRENT_DATA, enough to render current frame
         if (this.videoSource.readyState >= 2) {
             const vw = this.videoSource.videoWidth;
             const vh = this.videoSource.videoHeight;
@@ -369,6 +374,12 @@ export class CanvasVideoPlayer {
             const y = (h - drawH) / 2;
 
             this.ctx.drawImage(this.videoSource, x, y, drawW, drawH);
+        } else {
+            // Only draw black if we really don't have data and aren't just seeking
+            if (this.videoSource.readyState < 1) {
+                this.ctx.fillStyle = 'black';
+                this.ctx.fillRect(0, 0, w, h);
+            }
         }
 
         // Draw Watermark
@@ -407,6 +418,4 @@ export class CanvasVideoPlayer {
 
         this.ctx.restore();
     }
-
-
 }
