@@ -21833,7 +21833,7 @@ class zd {
       this.isDraggingTimeline = !1, this.videoSource.currentTime = this.timeline.value;
     }, this.muteBtn.onclick = () => this.toggleMute(), this.unmuteBtn.onclick = () => this.toggleMute(), this.volumeSlider.oninput = () => {
       this.videoSource.volume = this.volumeSlider.value, this.videoSource.muted = this.volumeSlider.value === "0", this._updateVolumeState();
-    }, this.fsBtn.onclick = () => this.toggleFullscreen(), this.fsExitBtn.onclick = () => this.toggleFullscreen(), window.addEventListener("resize", this._handleResize);
+    }, this.fsBtn.onclick = () => this.toggleFullscreen(), this.fsExitBtn.onclick = () => this.toggleFullscreen(), window.addEventListener("resize", this._handleResize), this.wrapper.addEventListener("contextmenu", (e) => (e.preventDefault(), !1));
   }
   async load(e) {
     this.pause();
