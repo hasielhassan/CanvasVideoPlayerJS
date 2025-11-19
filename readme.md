@@ -1,135 +1,198 @@
-
 # Canvas Video Player
 
-A lightweight, dependency-free JavaScript class for playing MP4 videos on an HTML canvas. This provides a secure way to display watermarked video content by hiding the source URL and preventing easy downloads.
+A lightweight, secure, and customizable JavaScript video player that renders video frames to an HTML Canvas. This approach allows for real-time watermarking, obfuscation of the video source, and custom control layouts.
 
-The player renders video frames to a `<canvas>` element while playing the audio from a synchronized, hidden `<audio>` element. It replaces the default browser controls with a custom, secure UI.
-
-![Demo](demo.png)
+![Demo Animation](demo_animation.webp)
 
 ## Features
 
-  * **Canvas Rendering:** Video frames are drawn directly onto a `<canvas>`, allowing for real-time watermarking.
-  * **Dynamic Watermarking:** Apply and update a text watermark that is "burned" into the visible canvas frames.
-  * **Custom Secure Controls:** A clean, custom-built player UI (play/pause, timeline, volume, mute) that *removes* the browser's default "Download" button.
-  * **URL Obfuscation:** Fetches the video and loads it as a `blob:` URL. This hides the original `.mp4` source from the "Inspect Element" panel, deterring casual video theft.
-  * **Responsive & Styled:** Built with modern CSS and SVGs, designed to be easily dropped into any page (Tailwind CSS used for the demo).
+*   **Canvas Rendering:** Real-time rendering of video frames to canvas.
+*   **Dynamic Watermarking:** "Burn" text into the video display in real-time.
+*   **Secure/Obfuscated:** Hides the video source from casual inspection (no right-click save).
+*   **Performance:** Optimized rendering loop.
+*   **HLS Support:** Streaming support via [hls.js](https://github.com/video-dev/hls.js).
+*   **Flexible Controls:** Choose between 'overlay' (floating) or 'outside' (static) control layouts.
+*   **Customizable:** Hybrid styling system (Base CSS + Custom Classes).
+*   **Modular:** Built as a modern NPM package (ESM & UMD).
 
-## How to Use
+---
 
-### 1. Include the Files
+## Installation
 
-Add the `canvas-video-player.js` file to your project. 
-
-```html
-
-<script src="https://cdn.jsdelivr.net/gh/hasielhassan/CanvasVideoPlayerJS@v0.0.2/canvas-video-player.js"></script>
-
+### Option 1: NPM (Recommended)
+```bash
+npm install canvas-video-player
 ```
 
-You also need a basic HTML structure.
+### Option 2: CDN (Static/Browser)
+For usage without a build step, you can load the UMD build directly from a CDN like JSDelivr.
 
 ```html
-<!DOCTYPE html>
-<html>
-<head>
-    <!-- Add your own styles for the page -->
-    <link rel="stylesheet" href="styles.css">
-    
-    <!-- 
-      Add the player's CSS for the sliders and controls.
-      (You can copy this from the demo's <style> tag)
-    -->
-    <style>
-        input[type="range"].slider { ... }
-        .control-button { ... }
-        /* ... etc ... */
-    </style>
-</head>
-<body>
+<!-- Load CSS -->
+<script src="https://cdn.jsdelivr.net/npm/canvas-video-player@latest/dist/style.css"></script>
+<!-- Load JS -->
+<script src="https://cdn.jsdelivr.net/npm/canvas-video-player@latest/dist/canvas-video-player.umd.js"></script>
+```
 
-    <h1>My Secure Video</h1>
+---
 
-    <!-- 1. Create a container div for the player -->
-    <div id="my-player-container">
-        <!-- The player will be built here -->
-    </div>
+## Quick Start
 
-    <!-- 2. Include the player script -->
-    <script src="canvas-video-player.js"></script>
-
-    <!-- 3. Initialize the player -->
-    <script>
-        const container = document.getElementById('my-player-container');
-        
-        const player = new CanvasVideoPlayer(container, {
-            videoUrl: '[https://your-server.com/path/to/video.mp4](https://your-server.com/path/to/video.mp4)',
-            watermarkText: 'Confidential'
-        });
-    </script>
-
-</body>
-</html>
-````
-
-### 2\. Initialization
-
-Create a new instance of the `CanvasVideoPlayer` class, passing in the container element and an options object.
-
+### ES Modules (Development)
 ```javascript
+import CanvasVideoPlayer from 'canvas-video-player';
+
 const container = document.getElementById('player-container');
+
 const player = new CanvasVideoPlayer(container, {
-    videoUrl: 'https://path/to/your/video.mp4',
-    watermarkText: 'Optional Watermark'
+    videoUrl: 'https://example.com/video.mp4',
+    watermarkText: 'Confidential'
 });
 ```
 
-The `videoUrl` is loaded immediately on construction.
+### UMD / Static HTML
+```html
+<div id="player-container"></div>
 
-### 3\. Public API Methods
+<script src="./dist/canvas-video-player.umd.js"></script>
+<script>
+    const container = document.getElementById('player-container');
+    const player = new CanvasVideoPlayer(container, {
+        videoUrl: 'https://example.com/video.mp4',
+        watermarkText: 'Confidential'
+    });
+</script>
+```
 
-You can interact with the player instance after it's created.
+---
 
-#### `.load(videoUrl)`
+## Configuration Guide
 
-Loads a new video into the player. This is an `async` function.
+### 1. Video Sources
+
+#### Direct MP4 (Standard)
+Best for simple use cases and smaller files.
+```javascript
+const player = new CanvasVideoPlayer(container, {
+    videoUrl: 'path/to/video.mp4',
+    strategy: 'direct' // Default
+});
+```
+
+#### HLS Streaming (Recommended for Production)
+Best for long videos and adaptive bitrate streaming. Requires `.m3u8` playlist.
+```javascript
+const player = new CanvasVideoPlayer(container, {
+    videoUrl: 'https://example.com/stream.m3u8',
+    strategy: 'mse' // Activates HLS handler
+});
+```
+
+> **FFmpeg Guide: Transcoding to HLS**
+> To convert a standard MP4 to HLS format using FFmpeg:
+> ```bash
+> ffmpeg -i input.mp4 -profile:v baseline -level 3.0 -s 640x360 -start_number 0 -hls_time 10 -hls_list_size 0 -f hls output.m3u8
+> ```
+> This generates an `output.m3u8` file and multiple `.ts` segment files.
+
+### 2. Controls Layout
+
+#### Overlay (Default)
+Controls float on top of the video. Good for immersive experiences.
+```javascript
+const player = new CanvasVideoPlayer(container, {
+    controlsLayout: 'overlay'
+});
+```
+
+#### Outside
+Controls sit in a dedicated row below the video. Good for preserving 100% of the video view.
+```javascript
+const player = new CanvasVideoPlayer(container, {
+    controlsLayout: 'outside'
+});
+```
+*Note: The 'outside' layout adds height to the player container. Ensure your parent container allows for this extra space.*
+
+### 3. Styling & Customization
+
+The player uses a hybrid approach. It injects base styles (`base.css`) for functionality but allows you to override them or add custom classes (e.g., Tailwind).
 
 ```javascript
-// Example: Load a new video from a button click
-myButton.addEventListener('click', () => {
-    player.load('https://path/to/another-video.mp4');
+const player = new CanvasVideoPlayer(container, {
+    styleConfig: {
+        wrapper: 'border-2 border-gray-800 rounded-lg', // Custom wrapper classes
+        canvas: 'rounded-t-lg',                         // Custom canvas classes
+        controls: 'bg-gray-900 text-white'              // Custom controls container classes
+    }
 });
 ```
 
-#### `.setWatermark(text)`
+---
 
-Updates the watermark text in real-time. If the video is paused, the canvas will redraw with the new text immediately.
+## API Reference
 
+### Constructor Options
+| Option | Type | Default | Description |
+| :--- | :--- | :--- | :--- |
+| `videoUrl` | `string` | `null` | URL of the video source. |
+| `watermarkText` | `string` | `''` | Text to display as a watermark. |
+| `strategy` | `'direct' \| 'mse'` | `'direct'` | Loading strategy. Use `'mse'` for HLS. |
+| `controlsLayout` | `'overlay' \| 'outside'` | `'overlay'` | Position of the controls. |
+| `styleConfig` | `object` | `{}` | Object containing custom class names. |
+
+### Methods
+
+#### `load(url)`
+Loads a new video URL.
 ```javascript
-// Example: Update watermark from an input field
-myInput.addEventListener('input', (e) => {
-    player.setWatermark(e.target.value);
-});
+player.load('https://example.com/new-video.mp4');
 ```
 
-#### `.destroy()`
-
-Safely removes the player, cleans up event listeners, and revokes any active `blob:` URLs to prevent memory leaks.
-
+#### `play()` / `pause()` / `stop()`
+Control playback state. `stop()` resets time to 0.
 ```javascript
-// Example: Remove the player
-myRemoveButton.addEventListener('click', () => {
-    player.destroy();
-});
+player.play();
 ```
 
-## Security & Obfuscation
+#### `setWatermark(text)`
+Updates the watermark text in real-time.
+```javascript
+player.setWatermark('New Watermark Text');
+```
 
-This player is designed to deter *casual* users from downloading your video.
+#### `destroy()`
+Cleans up event listeners and DOM elements. Call this before removing the player.
+```javascript
+player.destroy();
+```
 
-  * **No Download Button:** The custom controls do not have a download option.
-  * **Blob URL:** The player `fetches` the video and sets the `<video>` and `<audio>` source to a local `blob:` URL. This means "Inspect Element" will only show `src="blob:http://..."`, not your actual `.mp4` URL.
+---
 
-**Limitation:** This does **not** stop a tech-savvy user. A user who opens the **Network Tab** in their browser's developer tools *before* loading the video will still be able to see the original `.mp4` file being downloaded.
+## Development
 
-For true, high-level security, you must implement server-side solutions like **expiring (signed) URLs** or **encrypted streaming (HLS/DASH)**. This player provides a strong, client-side first line of defense.
+1.  **Clone & Install**
+    ```bash
+    git clone <repo-url>
+    npm install
+    ```
+
+2.  **Run Dev Server**
+    ```bash
+    npm run dev
+    ```
+    Opens the **Dev Demo** (`demo-dev.html`) with tabs for testing all configurations.
+
+3.  **Build for Production**
+    ```bash
+    npm run build
+    ```
+    Generates `dist/` folder with UMD and ESM builds.
+
+## License
+
+MIT
+
+## AI Disclaimer
+
+This project has been created using AI, LLM models, agents and related tools.

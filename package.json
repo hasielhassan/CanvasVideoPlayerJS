@@ -1,0 +1,31 @@
+{
+  "name": "canvas-video-player",
+  "version": "0.1.0",
+  "description": "A secure, watermarked video player using HTML5 Canvas.",
+  "main": "dist/canvas-video-player.umd.js",
+  "module": "dist/canvas-video-player.es.js",
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "keywords": [
+    "video",
+    "canvas",
+    "player",
+    "watermark",
+    "security",
+    "obfuscation"
+  ],
+  "author": "Hasiel Hassan",
+  "license": "MIT",
+  "devDependencies": {
+    "vite": "^7.2.2"
+  },
+  "dependencies": {
+    "hls.js": "^1.6.15"
+  }
+}

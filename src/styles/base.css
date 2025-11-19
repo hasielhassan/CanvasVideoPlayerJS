@@ -1,0 +1,101 @@
+/* Base styles for CanvasVideoPlayer */
+.cvp-wrapper {
+    position: relative;
+    background-color: #000;
+    overflow: hidden;
+    border-radius: 8px;
+    font-family: 'Inter', sans-serif;
+}
+
+.cvp-canvas {
+    display: block;
+    width: 100%;
+    height: auto;
+    background-color: #000;
+}
+
+.cvp-controls-overlay {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: linear-gradient(to top, rgba(0, 0, 0, 0.8), transparent);
+    padding: 20px 10px 10px;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.cvp-wrapper:hover .cvp-controls-overlay,
+.cvp-wrapper.cvp-paused .cvp-controls-overlay {
+    opacity: 1;
+}
+
+.cvp-controls-outside {
+    width: 100%;
+    background-color: #1f2937;
+    padding: 10px;
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    box-sizing: border-box;
+    border-bottom-left-radius: 8px;
+    border-bottom-right-radius: 8px;
+}
+
+.cvp-controls-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    width: 100%;
+}
+
+.cvp-btn {
+    background: none;
+    border: none;
+    color: white;
+    cursor: pointer;
+    padding: 5px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0.9;
+    transition: opacity 0.2s;
+}
+
+.cvp-btn:hover {
+    opacity: 1;
+}
+
+.cvp-slider {
+    -webkit-appearance: none;
+    appearance: none;
+    background: rgba(255, 255, 255, 0.2);
+    height: 4px;
+    border-radius: 2px;
+    cursor: pointer;
+    outline: none;
+}
+
+.cvp-slider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 12px;
+    height: 12px;
+    background: white;
+    border-radius: 50%;
+    cursor: pointer;
+}
+
+.cvp-time {
+    color: #ddd;
+    font-size: 12px;
+    min-width: 80px;
+    text-align: center;
+}
+
+.cvp-hidden {
+    display: none !important;
+}
