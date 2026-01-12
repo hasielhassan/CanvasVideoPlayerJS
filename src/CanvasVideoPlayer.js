@@ -22,8 +22,12 @@ export class CanvasVideoPlayer {
             watermarkText: '',
             styleConfig: {},
             controlsLayout: 'overlay', // 'overlay' or 'outside'
+            fps: 30,
             ...options
         };
+
+        // Internal state
+        this.displayMode = 'time'; // 'time' or 'frames'
 
         // Inject base styles
         injectStyles();
@@ -90,13 +94,17 @@ export class CanvasVideoPlayer {
         const controlsRow = document.createElement('div');
         controlsRow.className = 'cvp-controls-row';
 
+        this.stepBackwardBtn = this._createBtn(Icons.stepBackward(), 'Step Backward');
         this.playBtn = this._createBtn(Icons.play(), 'Play');
         this.pauseBtn = this._createBtn(Icons.pause(), 'Pause');
         this.pauseBtn.classList.add('cvp-hidden');
         this.stopBtn = this._createBtn(Icons.stop(), 'Stop');
+        this.stepForwardBtn = this._createBtn(Icons.stepForward(), 'Step Forward');
 
-        this.timeDisplay = document.createElement('div');
-        this.timeDisplay.className = 'cvp-time';
+        this.timeDisplay = document.createElement('button');
+        this.timeDisplay.className = 'cvp-time cvp-btn-text';
+        this.timeDisplay.style.cursor = 'pointer';
+        this.timeDisplay.title = 'Click to toggle time/frames';
         this.timeDisplay.textContent = '0:00 / 0:00';
 
         this.timeline = document.createElement('input');
@@ -126,9 +134,11 @@ export class CanvasVideoPlayer {
 
         // Append all to single row
         controlsRow.append(
+            this.stepBackwardBtn,
             this.playBtn,
             this.pauseBtn,
             this.stopBtn,
+            this.stepForwardBtn,
             this.timeDisplay,
             this.timeline,
             this.muteBtn,
@@ -159,9 +169,11 @@ export class CanvasVideoPlayer {
 
     _addListeners() {
         // Playback
+        this.stepBackwardBtn.onclick = () => this.stepBackward();
         this.playBtn.onclick = () => this.play();
         this.pauseBtn.onclick = () => this.pause();
         this.stopBtn.onclick = () => this.stop();
+        this.stepForwardBtn.onclick = () => this.stepForward();
         this.videoSource.onplay = () => this._updatePlayState(true);
         this.videoSource.onpause = () => this._updatePlayState(false);
         this.videoSource.onended = () => this._updatePlayState(false);
@@ -177,6 +189,29 @@ export class CanvasVideoPlayer {
             this.timeline.max = this.videoSource.duration;
             this._updateTimeDisplay();
             this._resizeCanvas(); // Ensure canvas matches video aspect ratio
+        };
+
+        // Time Display Toggle
+        this.timeDisplay.onclick = () => this.toggleTimeDisplay();
+
+        // Keyboard Shortcuts
+        this.wrapper.tabIndex = 0; // Make focusable
+        this.wrapper.onkeydown = (e) => {
+            switch (e.key) {
+                case 'ArrowLeft':
+                    e.preventDefault();
+                    this.stepBackward();
+                    break;
+                case 'ArrowRight':
+                    e.preventDefault();
+                    this.stepForward();
+                    break;
+                case ' ':
+                    e.preventDefault();
+                    if (this.isPlaying) this.pause();
+                    else this.play();
+                    break;
+            }
         };
 
         // NEW: Handle seeked event
@@ -255,6 +290,27 @@ export class CanvasVideoPlayer {
         this._updateVolumeState();
     }
 
+    stepForward() {
+        this.pause();
+        this.videoSource.currentTime = Math.min(
+            this.videoSource.duration,
+            this.videoSource.currentTime + (1 / this.options.fps)
+        );
+    }
+
+    stepBackward() {
+        this.pause();
+        this.videoSource.currentTime = Math.max(
+            0,
+            this.videoSource.currentTime - (1 / this.options.fps)
+        );
+    }
+
+    toggleTimeDisplay() {
+        this.displayMode = this.displayMode === 'time' ? 'frames' : 'time';
+        this._updateTimeDisplay();
+    }
+
     toggleFullscreen() {
         if (!document.fullscreenElement) {
             this.wrapper.requestFullscreen();
@@ -312,6 +368,10 @@ export class CanvasVideoPlayer {
     }
 
     _formatTime(seconds) {
+        if (this.displayMode === 'frames') {
+            const frame = Math.floor(seconds * this.options.fps);
+            return `${frame}`;
+        }
         const m = Math.floor(seconds / 60);
         const s = Math.floor(seconds % 60);
         return `${m}:${s.toString().padStart(2, '0')}`;

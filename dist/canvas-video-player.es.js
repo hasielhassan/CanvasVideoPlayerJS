@@ -1,19 +1,21 @@
-const rt = {
-  play: (a = {}) => nt("M8 5v14l11-7z", { ...a, width: 24, height: 24 }),
-  pause: (a = {}) => nt("M6 19h4V5H6v14zm8-14v14h4V5h-4z", { ...a, width: 24, height: 24 }),
-  volume: (a = {}) => nt("M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z", { ...a, width: 20, height: 20 }),
-  volumeMute: (a = {}) => nt("M16.5 12c0-1.77-1.02-3.29-2.5-4.03v2.21l2.45 2.45c.03-.2.05-.41.05-.63zm2.5 0c0 .94-.2 1.82-.54 2.64l1.51 1.51C20.63 14.91 21 13.5 21 12c0-4.28-2.99-7.86-7-8.77v2.06c2.89.86 5 3.54 5 6.71zM4.27 3L3 4.27 7.73 9H3v6h4l5 5v-6.73l4.25 4.25c-.67.52-1.42.93-2.25 1.18v2.06c1.38-.31 2.63-.95 3.69-1.81L19.73 21 21 19.73l-9-9L4.27 3zM12 4L9.91 6.09 12 8.18V4z", { ...a, width: 20, height: 20 }),
-  fullscreen: (a = {}) => nt("M7 14H5v5h5v-2H7v-3zm-2-4h2V7h3V5H5v5zm12 7h-3v2h5v-5h-2v3zM14 5v2h3v3h2V5h-5z", { ...a, width: 24, height: 24 }),
-  fullscreenExit: (a = {}) => nt("M5 16h3v3h2v-5H5v2zm3-8H5v2h5V5H8v3zm6 11h2v-3h3v-2h-5v5zm2-11V5h-2v5h5V8h-3z", { ...a, width: 24, height: 24 }),
-  stop: (a = {}) => nt("M6 6h12v12H6z", { ...a, width: 24, height: 24 })
+const He = {
+  play: (a = {}) => Ye("M8 5v14l11-7z", { ...a, width: 24, height: 24 }),
+  pause: (a = {}) => Ye("M6 19h4V5H6v14zm8-14v14h4V5h-4z", { ...a, width: 24, height: 24 }),
+  volume: (a = {}) => Ye("M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z", { ...a, width: 20, height: 20 }),
+  volumeMute: (a = {}) => Ye("M16.5 12c0-1.77-1.02-3.29-2.5-4.03v2.21l2.45 2.45c.03-.2.05-.41.05-.63zm2.5 0c0 .94-.2 1.82-.54 2.64l1.51 1.51C20.63 14.91 21 13.5 21 12c0-4.28-2.99-7.86-7-8.77v2.06c2.89.86 5 3.54 5 6.71zM4.27 3L3 4.27 7.73 9H3v6h4l5 5v-6.73l4.25 4.25c-.67.52-1.42.93-2.25 1.18v2.06c1.38-.31 2.63-.95 3.69-1.81L19.73 21 21 19.73l-9-9L4.27 3zM12 4L9.91 6.09 12 8.18V4z", { ...a, width: 20, height: 20 }),
+  fullscreen: (a = {}) => Ye("M7 14H5v5h5v-2H7v-3zm-2-4h2V7h3V5H5v5zm12 7h-3v2h5v-5h-2v3zM14 5v2h3v3h2V5h-5z", { ...a, width: 24, height: 24 }),
+  fullscreenExit: (a = {}) => Ye("M5 16h3v3h2v-5H5v2zm3-8H5v2h5V5H8v3zm6 11h2v-3h3v-2h-5v5zm2-11V5h-2v5h5V8h-3z", { ...a, width: 24, height: 24 }),
+  stop: (a = {}) => Ye("M6 6h12v12H6z", { ...a, width: 24, height: 24 }),
+  stepForward: (a = {}) => Ye("M4 18l8.5-6L4 6v12zm9-12v12l8.5-6L13 6z", { ...a, width: 24, height: 24 }),
+  stepBackward: (a = {}) => Ye("M11 18V6l-8.5 6 8.5 6zm.5-6l8.5 6V6l-8.5 6z", { ...a, width: 24, height: 24 })
 };
-function nt(a, { width: e = 24, height: t = 24, fill: s = "currentColor", className: i = "" } = {}) {
+function Ye(a, { width: e = 24, height: t = 24, fill: s = "currentColor", className: i = "" } = {}) {
   const r = document.createElementNS("http://www.w3.org/2000/svg", "svg");
   r.setAttribute("viewBox", "0 0 24 24"), r.setAttribute("width", e), r.setAttribute("height", t), r.setAttribute("fill", s), i && r.setAttribute("class", i);
   const n = document.createElementNS("http://www.w3.org/2000/svg", "path");
   return n.setAttribute("d", a), r.appendChild(n), r;
 }
-const Ga = ".cvp-wrapper{position:relative;background-color:#000;overflow:hidden;border-radius:8px;font-family:Inter,sans-serif}.cvp-canvas{display:block;width:100%;height:auto;background-color:#000}.cvp-controls-overlay{position:absolute;bottom:0;left:0;right:0;background:linear-gradient(to top,rgba(0,0,0,.8),transparent);padding:20px 10px 10px;opacity:0;transition:opacity .3s ease;display:flex;flex-direction:column;gap:10px}.cvp-wrapper:hover .cvp-controls-overlay,.cvp-wrapper.cvp-paused .cvp-controls-overlay{opacity:1}.cvp-controls-outside{width:100%;background-color:#1f2937;padding:10px;display:flex;gap:10px;align-items:center;box-sizing:border-box;border-bottom-left-radius:8px;border-bottom-right-radius:8px}.cvp-controls-row{display:flex;align-items:center;gap:10px;width:100%}.cvp-btn{background:none;border:none;color:#fff;cursor:pointer;padding:5px;display:flex;align-items:center;justify-content:center;opacity:.9;transition:opacity .2s}.cvp-btn:hover{opacity:1}.cvp-slider{-webkit-appearance:none;appearance:none;background:#fff3;height:4px;border-radius:2px;cursor:pointer;outline:none}.cvp-slider::-webkit-slider-thumb{-webkit-appearance:none;appearance:none;width:12px;height:12px;background:#fff;border-radius:50%;cursor:pointer}.cvp-time{color:#ddd;font-size:12px;min-width:80px;text-align:center}.cvp-hidden{display:none!important}";
+const Ga = ".cvp-wrapper{position:relative;background-color:#000;overflow:hidden;border-radius:8px;font-family:Inter,sans-serif}.cvp-canvas{display:block;width:100%;height:auto;background-color:#000}.cvp-controls-overlay{position:absolute;bottom:0;left:0;right:0;background:linear-gradient(to top,rgba(0,0,0,.8),transparent);padding:20px 10px 10px;opacity:0;transition:opacity .3s ease;display:flex;flex-direction:column;gap:10px}.cvp-wrapper:hover .cvp-controls-overlay,.cvp-wrapper.cvp-paused .cvp-controls-overlay{opacity:1}.cvp-controls-outside{width:100%;background-color:#1f2937;padding:10px;display:flex;gap:10px;align-items:center;box-sizing:border-box;border-bottom-left-radius:8px;border-bottom-right-radius:8px}.cvp-controls-row{display:flex;align-items:center;gap:10px;width:100%}.cvp-btn{background:none;border:none;color:#fff;cursor:pointer;padding:5px;display:flex;align-items:center;justify-content:center;opacity:.9;transition:opacity .2s}.cvp-btn:hover{opacity:1}.cvp-slider{-webkit-appearance:none;appearance:none;background:#fff3;height:4px;border-radius:2px;cursor:pointer;outline:none}.cvp-slider::-webkit-slider-thumb{-webkit-appearance:none;appearance:none;width:12px;height:12px;background:#fff;border-radius:50%;cursor:pointer}.cvp-time{color:#ddd;font-size:13px;min-width:90px;text-align:center;background:transparent;border:none;font-family:inherit;padding:4px 8px;border-radius:4px;transition:all .2s ease}.cvp-time:hover{background-color:#ffffff1a;color:#fff}.cvp-hidden{display:none!important}";
 function Ka(a = "") {
   const e = "cvp-base-styles";
   if (!document.getElementById(e)) {
@@ -156,24 +158,24 @@ class Ce {
   constructor(e, t) {
     this.trace = void 0, this.debug = void 0, this.log = void 0, this.warn = void 0, this.info = void 0, this.error = void 0;
     const s = `[${e}]:`;
-    this.trace = Xe, this.debug = t.debug.bind(null, s), this.log = t.log.bind(null, s), this.warn = t.warn.bind(null, s), this.info = t.info.bind(null, s), this.error = t.error.bind(null, s);
+    this.trace = Ze, this.debug = t.debug.bind(null, s), this.log = t.log.bind(null, s), this.warn = t.warn.bind(null, s), this.info = t.info.bind(null, s), this.error = t.error.bind(null, s);
   }
 }
-const Xe = function() {
+const Ze = function() {
 }, za = {
-  trace: Xe,
-  debug: Xe,
-  log: Xe,
-  warn: Xe,
-  info: Xe,
-  error: Xe
+  trace: Ze,
+  debug: Ze,
+  log: Ze,
+  warn: Ze,
+  info: Ze,
+  error: Ze
 };
 function zs() {
   return ie({}, za);
 }
 function Xa(a, e) {
   const t = self.console[a];
-  return t ? t.bind(self.console, `${e ? "[" + e + "] " : ""}[${a}] >`) : Xe;
+  return t ? t.bind(self.console, `${e ? "[" + e + "] " : ""}[${a}] >`) : Ze;
 }
 function Hi(a, e, t) {
   return e[a] ? e[a].bind(e) : Xa(a, t);
@@ -207,7 +209,7 @@ function Qa(a, e, t) {
   return s;
 }
 const se = Xs;
-function Je(a = !0) {
+function tt(a = !0) {
   return typeof self > "u" ? void 0 : (a || !self.MediaSource) && self.ManagedMediaSource || self.MediaSource || self.WebKitMediaSource;
 }
 function Za(a) {
@@ -1305,7 +1307,7 @@ function kt(a, e, t = !0) {
 }
 function Ei(a, e, t = !0) {
   var s;
-  const i = Je(t);
+  const i = tt(t);
   return (s = i?.isTypeSupported(wt(a, e))) != null ? s : !1;
 }
 function wt(a, e) {
@@ -1343,7 +1345,7 @@ function To(a, e = !0) {
     var s;
     if (Ei(t[i], "audio", e))
       return _s[a] = t[i], t[i];
-    if (t[i] === "mp3" && (s = Je(e)) != null && s.isTypeSupported("audio/mpeg"))
+    if (t[i] === "mp3" && (s = tt(e)) != null && s.isTypeSupported("audio/mpeg"))
       return "";
   }
   return a;
@@ -1398,7 +1400,7 @@ function Ao(a) {
   return a;
 }
 function Qi(a) {
-  const e = Je(a) || {
+  const e = tt(a) || {
     isTypeSupported: () => !1
   };
   return {
@@ -2950,7 +2952,7 @@ function ar(a, e) {
     return s || t.clearElementaryStreamInfo(), s;
   });
 }
-var et = {
+var st = {
   cbc: 0,
   ctr: 1
 };
@@ -2960,12 +2962,12 @@ class jo {
   }
   decrypt(e, t) {
     switch (this.aesMode) {
-      case et.cbc:
+      case st.cbc:
         return this.subtle.decrypt({
           name: "AES-CBC",
           iv: this.aesIV
         }, t, e);
-      case et.ctr:
+      case st.ctr:
         return this.subtle.decrypt(
           {
             name: "AES-CTR",
@@ -3065,9 +3067,9 @@ class Qo {
 }
 function Zo(a) {
   switch (a) {
-    case et.cbc:
+    case st.cbc:
       return "AES-CBC";
-    case et.ctr:
+    case st.ctr:
       return "AES-CTR";
     default:
       throw new Error(`[FastAESKey] invalid aes mode ${a}`);
@@ -3121,7 +3123,7 @@ class vi {
       currentResult: n,
       remainderData: o
     } = this;
-    if (i !== et.cbc || t.byteLength !== 16)
+    if (i !== st.cbc || t.byteLength !== 16)
       return se.warn("SoftwareDecrypt: can only handle AES-128-CBC"), null;
     this.logOnce("JS AES decrypt"), o && (e = De(o, e), this.remainderData = null);
     const c = this.getValidChunk(e);
@@ -3174,7 +3176,7 @@ class el {
   load(e, t) {
     const s = e.url;
     if (!s)
-      return Promise.reject(new We({
+      return Promise.reject(new je({
         type: V.NETWORK_ERROR,
         details: R.FRAG_LOAD_ERROR,
         fatal: !1,
@@ -3214,7 +3216,7 @@ class el {
           });
         },
         onError: (g, y, p, E) => {
-          this.resetLoader(e, l), c(new We({
+          this.resetLoader(e, l), c(new je({
             type: V.NETWORK_ERROR,
             details: R.FRAG_LOAD_ERROR,
             fatal: !1,
@@ -3229,7 +3231,7 @@ class el {
           }));
         },
         onAbort: (g, y, p) => {
-          this.resetLoader(e, l), c(new We({
+          this.resetLoader(e, l), c(new je({
             type: V.NETWORK_ERROR,
             details: R.INTERNAL_ABORTED,
             fatal: !1,
@@ -3240,7 +3242,7 @@ class el {
           }));
         },
         onTimeout: (g, y, p) => {
-          this.resetLoader(e, l), c(new We({
+          this.resetLoader(e, l), c(new je({
             type: V.NETWORK_ERROR,
             details: R.FRAG_LOAD_TIMEOUT,
             fatal: !1,
@@ -3289,7 +3291,7 @@ class el {
           s(E), o(E);
         },
         onError: (f, g, y, p) => {
-          this.resetLoader(e, l), c(new We({
+          this.resetLoader(e, l), c(new je({
             type: V.NETWORK_ERROR,
             details: R.FRAG_LOAD_ERROR,
             fatal: !1,
@@ -3305,7 +3307,7 @@ class el {
           }));
         },
         onAbort: (f, g, y) => {
-          e.stats.aborted = t.stats.aborted, this.resetLoader(e, l), c(new We({
+          e.stats.aborted = t.stats.aborted, this.resetLoader(e, l), c(new je({
             type: V.NETWORK_ERROR,
             details: R.INTERNAL_ABORTED,
             fatal: !1,
@@ -3317,7 +3319,7 @@ class el {
           }));
         },
         onTimeout: (f, g, y) => {
-          this.resetLoader(e, l), c(new We({
+          this.resetLoader(e, l), c(new je({
             type: V.NETWORK_ERROR,
             details: R.FRAG_LOAD_TIMEOUT,
             fatal: !1,
@@ -3375,12 +3377,12 @@ function cr(a, e) {
     error: t,
     networkDetails: null
   };
-  return e && (s.part = e), (e || a).stats.aborted = !0, new We(s);
+  return e && (s.part = e), (e || a).stats.aborted = !0, new je(s);
 }
 function tl(a) {
   return a === "AES-128" || a === "AES-256";
 }
-class We extends Error {
+class je extends Error {
   constructor(e) {
     super(e.error.message), this.data = void 0, this.data = e;
   }
@@ -3871,9 +3873,9 @@ function xi(a) {
   switch (a) {
     case "AES-128":
     case "AES-256":
-      return et.cbc;
+      return st.cbc;
     case "AES-256-CTR":
-      return et.ctr;
+      return st.ctr;
     default:
       throw new Error(`invalid full segment method ${a}`);
   }
@@ -4005,7 +4007,7 @@ function On(a) {
   return null;
 }
 let gt = {};
-class Ze {
+class et {
   static clearKeyUriToKeyIdMap() {
     gt = {};
   }
@@ -4043,11 +4045,11 @@ class Ze {
       return null;
     if (vt(this.method)) {
       let r = this.iv;
-      return r || (typeof e != "number" && (se.warn(`missing IV for initialization segment with method="${this.method}" - compliance issue`), e = 0), r = gl(e)), new Ze(this.method, this.uri, "identity", this.keyFormatVersions, r);
+      return r || (typeof e != "number" && (se.warn(`missing IV for initialization segment with method="${this.method}" - compliance issue`), e = 0), r = gl(e)), new et(this.method, this.uri, "identity", this.keyFormatVersions, r);
     }
     if (this.keyId) {
       const r = gt[this.uri];
-      if (r && !ms(this.keyId, r) && Ze.setKeyIdForUri(this.uri, this.keyId), this.pssh)
+      if (r && !ms(this.keyId, r) && et.setKeyIdForUri(this.uri, this.keyId), this.pssh)
         return this;
     }
     const s = kn(this.uri);
@@ -4081,7 +4083,7 @@ class Ze {
       }
     if (!this.keyId || this.keyId.byteLength !== 16) {
       let r;
-      r = fl(t), r || (r = mr(t), r || (r = gt[this.uri])), r && (this.keyId = r, Ze.setKeyIdForUri(this.uri, r));
+      r = fl(t), r || (r = mr(t), r || (r = gt[this.uri])), r && (this.keyId = r, et.setKeyIdForUri(this.uri, r));
     }
     return this;
   }
@@ -4270,13 +4272,13 @@ class Ge {
             v.rawProgramDateTime = k, v.tagList.push(["PROGRAM-DATE-TIME", k]), A === -1 && (A = h.length);
             break;
           case "PLAYLIST-TYPE":
-            l.type && He(l, $, S), l.type = k.toUpperCase();
+            l.type && We(l, $, S), l.type = k.toUpperCase();
             break;
           case "MEDIA-SEQUENCE":
-            l.startSN !== 0 ? He(l, $, S) : h.length > 0 && Lr(l, $, S), f = l.startSN = parseInt(k);
+            l.startSN !== 0 ? We(l, $, S) : h.length > 0 && Lr(l, $, S), f = l.startSN = parseInt(k);
             break;
           case "SKIP": {
-            l.skippedSegments && He(l, $, S);
+            l.skippedSegments && We(l, $, S);
             const N = new ae(k, l), K = N.decimalInteger("SKIPPED-SEGMENTS");
             if (M(K)) {
               l.skippedSegments += K;
@@ -4289,15 +4291,15 @@ class Ge {
             break;
           }
           case "TARGETDURATION":
-            l.targetduration !== 0 && He(l, $, S), l.targetduration = Math.max(parseInt(k), 1);
+            l.targetduration !== 0 && We(l, $, S), l.targetduration = Math.max(parseInt(k), 1);
             break;
           case "VERSION":
-            l.version !== null && He(l, $, S), l.version = parseInt(k);
+            l.version !== null && We(l, $, S), l.version = parseInt(k);
             break;
           case "INDEPENDENT-SEGMENTS":
             break;
           case "ENDLIST":
-            l.live || He(l, $, S), l.live = !1;
+            l.live || We(l, $, S), l.live = !1;
             break;
           case "#":
             (k || G) && v.tagList.push(G ? [k, G] : [k]);
@@ -4324,7 +4326,7 @@ class Ge {
             break;
           }
           case "DISCONTINUITY-SEQUENCE":
-            l.startCC !== 0 ? He(l, $, S) : h.length > 0 && Lr(l, $, S), l.startCC = p = parseInt(k);
+            l.startCC !== 0 ? We(l, $, S) : h.length > 0 && Lr(l, $, S), l.startCC = p = parseInt(k);
             break;
           case "KEY": {
             const N = Er(k, t, l);
@@ -4361,11 +4363,11 @@ class Ge {
             break;
           }
           case "SERVER-CONTROL": {
-            L && He(l, $, S), L = new ae(k), l.canBlockReload = L.bool("CAN-BLOCK-RELOAD"), l.canSkipUntil = L.optionalFloat("CAN-SKIP-UNTIL", 0), l.canSkipDateRanges = l.canSkipUntil > 0 && L.bool("CAN-SKIP-DATERANGES"), l.partHoldBack = L.optionalFloat("PART-HOLD-BACK", 0), l.holdBack = L.optionalFloat("HOLD-BACK", 0);
+            L && We(l, $, S), L = new ae(k), l.canBlockReload = L.bool("CAN-BLOCK-RELOAD"), l.canSkipUntil = L.optionalFloat("CAN-SKIP-UNTIL", 0), l.canSkipDateRanges = l.canSkipUntil > 0 && L.bool("CAN-SKIP-DATERANGES"), l.partHoldBack = L.optionalFloat("PART-HOLD-BACK", 0), l.holdBack = L.optionalFloat("HOLD-BACK", 0);
             break;
           }
           case "PART-INF": {
-            l.partTarget && He(l, $, S);
+            l.partTarget && We(l, $, S);
             const N = new ae(k);
             l.partTarget = N.decimalFloatingPoint("PART-TARGET");
             break;
@@ -4458,7 +4460,7 @@ function Er(a, e, t) {
   const r = new ae(a, t), n = (s = r.METHOD) != null ? s : "", o = r.URI, c = r.hexadecimalInteger("IV"), l = r.KEYFORMATVERSIONS, h = (i = r.KEYFORMAT) != null ? i : "identity";
   o && r.IV && !c && se.error(`Invalid IV: ${r.IV}`);
   const d = o ? Ge.resolve(o, e) : "", u = (l || "1").split("/").map(Number).filter(Number.isFinite);
-  return new Ze(n, d, h, u, c, r.KEYID);
+  return new et(n, d, h, u, c, r.KEYID);
 }
 function Tr(a) {
   const t = new ae(a).decimalFloatingPoint("TIME-OFFSET");
@@ -4497,7 +4499,7 @@ function Ar(a, e, t) {
   } = t;
   (!s.length || s[s.length - 1].levelkeys !== e) && Object.keys(e).some((i) => e[i].isCommonEncryption) && s.push(a);
 }
-function He(a, e, t) {
+function We(a, e, t) {
   a.playlistParsingError = new Error(`#EXT-X-${e} must not appear more than once (${t[0]})`);
 }
 function Lr(a, e, t) {
@@ -6578,7 +6580,7 @@ class cc {
     });
   }
   decryptBuffer(e) {
-    return this.decrypter.decrypt(e, this.keyData.key.buffer, this.keyData.iv.buffer, et.cbc);
+    return this.decrypter.decrypt(e, this.keyData.key.buffer, this.keyData.iv.buffer, st.cbc);
   }
   // AAC - encrypt all full 16 bytes blocks starting from offset 16
   decryptAacSample(e, t, s) {
@@ -7124,18 +7126,18 @@ class dc extends na {
       if (J !== 0 && (Ee = t.readBoolean()), Ee) {
         J === N && t.readUEG(), t.readBoolean(), t.readUEG();
         let _e = 0;
-        for (let st = 0; st <= K; st++) {
+        for (let rt = 0; rt <= K; rt++) {
           const Pe = t.readBoolean();
           let dt = !1;
           Pe || (dt = t.readBoolean()), (Pe || dt) && _e++;
         }
         K = _e;
       } else {
-        const _e = t.readUEG(), st = t.readUEG();
-        K = _e + st;
+        const _e = t.readUEG(), rt = t.readUEG();
+        K = _e + rt;
         for (let Pe = 0; Pe < _e; Pe++)
           t.readUEG(), t.readBoolean();
-        for (let Pe = 0; Pe < st; Pe++)
+        for (let Pe = 0; Pe < rt; Pe++)
           t.readUEG(), t.readBoolean();
       }
     }
@@ -7152,8 +7154,8 @@ class dc extends na {
     let ye = !1;
     if (t.readBoolean()) {
       if (t.readBoolean()) {
-        const it = t.readUByte(), Bi = [1, 12, 10, 16, 40, 24, 20, 32, 80, 18, 15, 64, 160, 4, 3, 2], Ut = [1, 11, 11, 11, 33, 11, 11, 11, 33, 11, 11, 33, 99, 3, 2, 1];
-        it > 0 && it < 16 ? (O = Bi[it - 1], j = Ut[it - 1]) : it === 255 && (O = t.readBits(16), j = t.readBits(16));
+        const nt = t.readUByte(), Bi = [1, 12, 10, 16, 40, 24, 20, 32, 80, 18, 15, 64, 160, 4, 3, 2], Ut = [1, 11, 11, 11, 33, 11, 11, 11, 33, 11, 11, 33, 99, 3, 2, 1];
+        nt > 0 && nt < 16 ? (O = Bi[nt - 1], j = Ut[nt - 1]) : nt === 255 && (O = t.readBits(16), j = t.readBits(16));
       }
       if (t.readBoolean() && t.readBoolean(), t.readBoolean() && (t.readBits(3), t.readBoolean(), t.readBoolean() && (t.readUByte(), t.readUByte(), t.readUByte())), t.readBoolean() && (t.readUEG(), t.readUEG()), t.readBoolean(), t.readBoolean(), t.readBoolean(), ye = t.readBoolean(), ye && (t.skipUEG(), t.skipUEG(), t.skipUEG(), t.skipUEG()), t.readBoolean() && (z = t.readBits(32), Z = t.readBits(32), t.readBoolean() && t.readUEG(), t.readBoolean())) {
         const Ut = t.readBoolean(), Ui = t.readBoolean();
@@ -7180,13 +7182,13 @@ class dc extends na {
       let J = 1, Ee = 1;
       S === 1 ? J = Ee = 2 : S == 2 && (J = 2), be = x - J * b - J * _, Fe = D - Ee * P - Ee * L;
     }
-    const tt = i ? ["A", "B", "C"][i] : "", Ua = o << 24 | c << 16 | l << 8 | h;
+    const it = i ? ["A", "B", "C"][i] : "", Ua = o << 24 | c << 16 | l << 8 | h;
     let As = 0;
     for (let J = 0; J < 32; J++)
       As = (As | (Ua >> J & 1) << 31 - J) >>> 0;
     let Ls = As.toString(16);
     return n === 1 && Ls === "2" && (Ls = "6"), {
-      codecString: `hvc1.${tt}${n}.${Ls}.${r ? "H" : "L"}${E}.B0`,
+      codecString: `hvc1.${it}${n}.${Ls}.${r ? "H" : "L"}${E}.B0`,
       params: {
         general_tier_flag: r,
         general_profile_idc: n,
@@ -7223,12 +7225,12 @@ class dc extends na {
   }
 }
 const ue = 188;
-class Qe {
+class Je {
   constructor(e, t, s, i) {
     this.logger = void 0, this.observer = void 0, this.config = void 0, this.typeSupported = void 0, this.sampleAes = null, this.pmtParsed = !1, this.audioCodec = void 0, this.videoCodec = void 0, this._pmtId = -1, this._videoTrack = void 0, this._audioTrack = void 0, this._id3Track = void 0, this._txtTrack = void 0, this.aacOverFlow = null, this.remainderData = null, this.videoParser = void 0, this.observer = e, this.config = t, this.typeSupported = s, this.logger = i, this.videoParser = null;
   }
   static probe(e, t) {
-    const s = Qe.syncOffset(e);
+    const s = Je.syncOffset(e);
     return s > 0 && t.warn(`MPEG2-TS detected but first sync word found @ offset ${s}`), s !== -1;
   }
   static syncOffset(e) {
@@ -7270,7 +7272,7 @@ class Qe {
    * Resets all internal track instances of the demuxer.
    */
   resetInitSegment(e, t, s, i) {
-    this.pmtParsed = !1, this._pmtId = -1, this._videoTrack = Qe.createTrack("video"), this._videoTrack.duration = i, this._audioTrack = Qe.createTrack("audio", i), this._id3Track = Qe.createTrack("id3"), this._txtTrack = Qe.createTrack("text"), this._audioTrack.segmentCodec = "aac", this.videoParser = null, this.aacOverFlow = null, this.remainderData = null, this.audioCodec = t, this.videoCodec = s;
+    this.pmtParsed = !1, this._pmtId = -1, this._videoTrack = Je.createTrack("video"), this._videoTrack.duration = i, this._audioTrack = Je.createTrack("audio", i), this._id3Track = Je.createTrack("id3"), this._txtTrack = Je.createTrack("text"), this._audioTrack.segmentCodec = "aac", this.videoParser = null, this.aacOverFlow = null, this.remainderData = null, this.audioCodec = t, this.videoCodec = s;
   }
   resetTimeStamp() {
   }
@@ -7294,7 +7296,7 @@ class Qe {
         id3Track: c,
         textTrack: l
       };
-    const S = Math.max(0, Qe.syncOffset(e));
+    const S = Math.max(0, Je.syncOffset(e));
     v -= (v - S) % ue, v < e.byteLength && !i && (this.remainderData = new Uint8Array(e.buffer, v, e.buffer.byteLength - v));
     let x = 0;
     for (let A = S; A < v; A += ue)
@@ -7684,7 +7686,7 @@ class gc {
     }
   }
 }
-const je = Math.pow(2, 32) - 1;
+const Xe = Math.pow(2, 32) - 1;
 class I {
   static init() {
     I.types = {
@@ -7951,7 +7953,7 @@ class I {
   }
   static mdhd(e, t) {
     t *= e;
-    const s = Math.floor(t / (je + 1)), i = Math.floor(t % (je + 1));
+    const s = Math.floor(t / (Xe + 1)), i = Math.floor(t % (Xe + 1));
     return I.box(I.types.mdhd, new Uint8Array([
       1,
       // version 1
@@ -8036,7 +8038,7 @@ class I {
   }
   static mvhd(e, t) {
     t *= e;
-    const s = Math.floor(t / (je + 1)), i = Math.floor(t % (je + 1)), r = new Uint8Array([
+    const s = Math.floor(t / (Xe + 1)), i = Math.floor(t % (Xe + 1)), r = new Uint8Array([
       1,
       // version 1
       0,
@@ -8450,7 +8452,7 @@ class I {
     throw new Error(`unsupported ${e.type} segment codec (${t}/${e.codec})`);
   }
   static tkhd(e) {
-    const t = e.id, s = (e.duration || 0) * (e.timescale || 0), i = e.width || 0, r = e.height || 0, n = Math.floor(s / (je + 1)), o = Math.floor(s % (je + 1));
+    const t = e.id, s = (e.duration || 0) * (e.timescale || 0), i = e.width || 0, r = e.height || 0, n = Math.floor(s / (Xe + 1)), o = Math.floor(s % (Xe + 1));
     return I.box(I.types.tkhd, new Uint8Array([
       1,
       // version 1
@@ -8565,7 +8567,7 @@ class I {
     ]));
   }
   static traf(e, t) {
-    const s = I.sdtp(e), i = e.id, r = Math.floor(t / (je + 1)), n = Math.floor(t % (je + 1));
+    const s = I.sdtp(e), i = e.id, r = Math.floor(t / (Xe + 1)), n = Math.floor(t % (Xe + 1));
     return I.box(
       I.types.traf,
       I.box(I.types.tfhd, new Uint8Array([
@@ -9068,8 +9070,8 @@ class rs extends Ce {
           for (let Z = 0; Z < n.length && !(n[Z].dts > ee && z); Z++) {
             const ye = n[Z].pts;
             if (n[Z].dts -= w, n[Z].pts -= w, Z < n.length - 1) {
-              const fe = n[Z + 1].pts, be = n[Z].pts, Fe = fe <= be, tt = fe <= ye;
-              z = Fe == tt;
+              const fe = n[Z + 1].pts, be = n[Z].pts, Fe = fe <= be, it = fe <= ye;
+              z = Fe == it;
             }
           }
         }
@@ -9108,8 +9110,8 @@ class rs extends Ce {
       const O = n[w], j = O.units;
       let ee = 0;
       for (let ye = 0, fe = j.length; ye < fe; ye++) {
-        const be = j[ye], Fe = be.data, tt = be.data.byteLength;
-        P.setUint32(u, tt), u += 4, L.set(Fe, u), u += tt, ee += 4 + tt;
+        const be = j[ye], Fe = be.data, it = be.data.byteLength;
+        P.setUint32(u, it), u += 4, L.set(Fe, u), u += it, ee += 4 + it;
       }
       let z;
       if (w < c - 1)
@@ -9446,17 +9448,17 @@ function Or(a, e, t) {
   const s = a.codec;
   return s && s.length > 4 ? s : e === re.AUDIO ? s === "ec-3" || s === "ac-3" || s === "alac" ? s : s === "fLaC" || s === "Opus" ? hs(s, !1) : (t.warn(`Unhandled audio codec "${s}" in mp4 MAP`), s || "mp4a") : (t.warn(`Unhandled video codec "${s}" in mp4 MAP`), s || "avc1");
 }
-let qe;
+let ze;
 try {
-  qe = self.performance.now.bind(self.performance);
+  ze = self.performance.now.bind(self.performance);
 } catch {
-  qe = Date.now;
+  ze = Date.now;
 }
 const ns = [{
   demux: lc,
   remux: xc
 }, {
-  demux: Qe,
+  demux: Je,
   remux: rs
 }, {
   demux: rc,
@@ -9478,7 +9480,7 @@ class Fr {
   }
   push(e, t, s, i) {
     const r = s.transmuxing;
-    r.executeStart = qe();
+    r.executeStart = ze();
     let n = new Uint8Array(e);
     const {
       currentTransmuxState: o,
@@ -9508,7 +9510,7 @@ class Fr {
           L = F && F.buffer;
         }
         if (!L)
-          return r.executeEnd = qe(), Ms(s);
+          return r.executeEnd = ze(), Ms(s);
         n = new Uint8Array(L);
       } else
         return this.asyncResult = !0, this.decryptionPromise = _.webCryptoDecrypt(n, S.key.buffer, S.iv.buffer, b).then((L) => {
@@ -9526,18 +9528,18 @@ class Fr {
           fatal: !1,
           error: _,
           reason: _.message
-        }), r.executeEnd = qe(), Ms(s);
+        }), r.executeEnd = ze(), Ms(s);
     }
     (h || d || g || x) && this.resetInitSegment(v, y, p, T, t), (h || g || x) && this.resetInitialTimestamp(E), l || this.resetContiguity();
     const D = this.transmux(n, S, f, u, s);
     this.asyncResult = Nt(D);
     const A = this.currentTransmuxState;
-    return A.contiguous = !0, A.discontinuity = !1, A.trackSwitch = !1, r.executeEnd = qe(), D;
+    return A.contiguous = !0, A.discontinuity = !1, A.trackSwitch = !1, r.executeEnd = ze(), D;
   }
   // Due to data caching, flush calls can produce more than one TransmuxerResult (hence the Array type)
   flush(e) {
     const t = e.transmuxing;
-    t.executeStart = qe();
+    t.executeStart = ze();
     const {
       decrypter: s,
       currentTransmuxState: i,
@@ -9557,7 +9559,7 @@ class Fr {
       remuxer: l
     } = this;
     if (!c || !l) {
-      t.executeEnd = qe();
+      t.executeEnd = ze();
       const d = [Ms(e)];
       return this.asyncResult ? Promise.resolve(d) : d;
     }
@@ -9579,7 +9581,7 @@ class Fr {
     e.push({
       remuxResult: h,
       chunkMeta: s
-    }), s.transmuxing.executeEnd = qe();
+    }), s.transmuxing.executeEnd = ze();
   }
   resetInitialTimestamp(e) {
     const {
@@ -10915,7 +10917,7 @@ class Pc extends Ce {
         _objectUrl: i
       } = this;
       s !== i && this.error(`Media element src was set while attaching MediaSource (${i} > ${s})`);
-    }, this.hls = e, this.fragmentTracker = t, this.appendSource = Za(Je(e.config.preferManagedMediaSource)), this.initTracks(), this.registerListeners();
+    }, this.hls = e, this.fragmentTracker = t, this.appendSource = Za(tt(e.config.preferManagedMediaSource)), this.initTracks(), this.registerListeners();
   }
   hasSourceTypes() {
     return Object.keys(this.tracks).length > 0;
@@ -10974,7 +10976,7 @@ class Pc extends Ce {
   onMediaAttaching(e, t) {
     const s = this.media = t.media;
     this.transferData = this.overrides = void 0;
-    const i = Je(this.appendSource);
+    const i = tt(this.appendSource);
     if (i) {
       const r = !!t.mediaSource;
       (r || t.overrides) && (this.transferData = t, this.overrides = t.overrides);
@@ -12096,7 +12098,7 @@ function sh(a, e = {
 function pa(a, e) {
   return sh(a, e);
 }
-const Ne = "CMCD-Object", le = "CMCD-Request", at = "CMCD-Session", ze = "CMCD-Status", ih = {
+const Ne = "CMCD-Object", le = "CMCD-Request", at = "CMCD-Session", Qe = "CMCD-Status", ih = {
   // Object
   br: Ne,
   ab: Ne,
@@ -12140,14 +12142,14 @@ const Ne = "CMCD-Object", le = "CMCD-Request", at = "CMCD-Session", ze = "CMCD-S
   v: at,
   msd: at,
   // Status
-  bs: ze,
-  bsd: ze,
-  cdn: ze,
-  rtp: ze,
-  bg: ze,
-  pt: ze,
-  ec: ze,
-  e: ze
+  bs: Qe,
+  bsd: Qe,
+  cdn: Qe,
+  rtp: Qe,
+  bg: Qe,
+  pt: Qe,
+  ec: Qe,
+  e: Qe
 }, rh = {
   /**
    * keys whose values vary with each request.
@@ -13372,7 +13374,7 @@ class St extends Ce {
     if (t && t(), !this.mediaKeys && !this.mediaKeySessions.length)
       return;
     const s = this.media, i = this.mediaKeySessions.slice();
-    this.mediaKeySessions = [], this.mediaKeys = null, Ze.clearKeyUriToKeyIdMap();
+    this.mediaKeySessions = [], this.mediaKeys = null, et.clearKeyUriToKeyIdMap();
     const r = i.length;
     St.CDMCleanupPromise = Promise.all(i.map((n) => this.removeSession(n)).concat((s == null || (e = s.setMediaKeys(null)) == null ? void 0 : e.catch((n) => {
       this.log(`Could not clear media keys: ${n}`), this.hls && this.hls.trigger(m.ERROR, {
@@ -16324,7 +16326,7 @@ const Wh = {
   // Box drawings heavy up and right
   207: 9499
   // Box drawings heavy up and left
-}, Ra = (a) => String.fromCharCode(Wh[a] || a), we = 15, Ye = 100, qh = {
+}, Ra = (a) => String.fromCharCode(Wh[a] || a), we = 15, qe = 100, qh = {
   17: 1,
   18: 3,
   21: 5,
@@ -16429,23 +16431,23 @@ class Jh {
 class ed {
   constructor(e) {
     this.chars = [], this.pos = 0, this.currPenState = new ba(), this.cueStartTime = null, this.logger = void 0;
-    for (let t = 0; t < Ye; t++)
+    for (let t = 0; t < qe; t++)
       this.chars.push(new Jh());
     this.logger = e;
   }
   equals(e) {
-    for (let t = 0; t < Ye; t++)
+    for (let t = 0; t < qe; t++)
       if (!this.chars[t].equals(e.chars[t]))
         return !1;
     return !0;
   }
   copy(e) {
-    for (let t = 0; t < Ye; t++)
+    for (let t = 0; t < qe; t++)
       this.chars[t].copy(e.chars[t]);
   }
   isEmpty() {
     let e = !0;
-    for (let t = 0; t < Ye; t++)
+    for (let t = 0; t < qe; t++)
       if (!this.chars[t].isEmpty()) {
         e = !1;
         break;
@@ -16456,7 +16458,7 @@ class ed {
    *  Set the cursor to a valid column.
    */
   setCursor(e) {
-    this.pos !== e && (this.pos = e), this.pos < 0 ? (this.logger.log(3, "Negative cursor position " + this.pos), this.pos = 0) : this.pos > Ye && (this.logger.log(3, "Too large cursor position " + this.pos), this.pos = Ye);
+    this.pos !== e && (this.pos = e), this.pos < 0 ? (this.logger.log(3, "Negative cursor position " + this.pos), this.pos = 0) : this.pos > qe && (this.logger.log(3, "Too large cursor position " + this.pos), this.pos = qe);
   }
   /**
    * Move the cursor relative to current position.
@@ -16477,7 +16479,7 @@ class ed {
   insertChar(e) {
     e >= 144 && this.backSpace();
     const t = Ra(e);
-    if (this.pos >= Ye) {
+    if (this.pos >= qe) {
       this.logger.log(0, () => "Cannot insert " + e.toString(16) + " (" + t + ") at position " + this.pos + ". Skipping it!");
       return;
     }
@@ -16485,7 +16487,7 @@ class ed {
   }
   clearFromPos(e) {
     let t;
-    for (t = e; t < Ye; t++)
+    for (t = e; t < qe; t++)
       this.chars[t].reset();
   }
   clear() {
@@ -16497,7 +16499,7 @@ class ed {
   getTextString() {
     const e = [];
     let t = !0;
-    for (let s = 0; s < Ye; s++) {
+    for (let s = 0; s < qe; s++) {
       const i = this.chars[s].uchar;
       i !== " " && (t = !1), e.push(i);
     }
@@ -19627,7 +19629,7 @@ function Ma() {
   return self.SourceBuffer || self.WebKitSourceBuffer;
 }
 function Na() {
-  if (!Je())
+  if (!tt())
     return !1;
   const e = Ma();
   return !e || e.prototype && typeof e.prototype.appendBuffer == "function" && typeof e.prototype.remove == "function";
@@ -19635,7 +19637,7 @@ function Na() {
 function Gd() {
   if (!Na())
     return !1;
-  const a = Je();
+  const a = tt();
   return typeof a?.isTypeSupported == "function" && (["avc1.42E01E,mp4a.40.2", "av01.0.01M.08", "vp09.00.50.08"].some((e) => a.isTypeSupported(wt(e, "video"))) || ["mp4a.40.2", "fLaC"].some((e) => a.isTypeSupported(wt(e, "audio"))));
 }
 function Kd() {
@@ -20398,7 +20400,7 @@ class Yd extends Ce {
     this.keyIdToKeyInfo = {};
   }
   createKeyLoadError(e, t = R.KEY_LOAD_ERROR, s, i, r) {
-    return new We({
+    return new je({
       type: V.NETWORK_ERROR,
       details: t,
       fatal: !1,
@@ -20495,7 +20497,7 @@ class Yd extends Ce {
         const n = co(t.initSegment.data);
         if (n.length) {
           let o = n[0];
-          o.some((c) => c !== 0) ? (this.log(`Using keyId found in init segment ${me(o)}`), Ze.setKeyIdForUri(e.decryptdata.uri, o)) : (o = Ze.addKeyIdForUri(e.decryptdata.uri), this.log(`Generating keyId to patch media ${me(o)}`)), e.decryptdata.keyId = o;
+          o.some((c) => c !== 0) ? (this.log(`Using keyId found in init segment ${me(o)}`), et.setKeyIdForUri(e.decryptdata.uri, o)) : (o = et.addKeyIdForUri(e.decryptdata.uri), this.log(`Generating keyId to patch media ${me(o)}`)), e.decryptdata.keyId = o;
         }
       }
       if (!e.decryptdata.keyId && !ce(t))
@@ -21042,7 +21044,7 @@ class Oe {
    * Get the MediaSource global used for MSE playback (ManagedMediaSource, MediaSource, or WebKitMediaSource).
    */
   static getMediaSource() {
-    return Je();
+    return tt();
   }
   static get Events() {
     return m;
@@ -21796,8 +21798,9 @@ class zd {
       styleConfig: {},
       controlsLayout: "overlay",
       // 'overlay' or 'outside'
+      fps: 30,
       ...t
-    }, Ka(), this.videoSource = null, this.sourceHandler = null, this.canvas = null, this.ctx = null, this.animationFrameId = null, this.isMuted = !1, this.isPlaying = !1, this._drawFrame = this._drawFrame.bind(this), this._handleResize = this._handleResize.bind(this), this._buildUI(), this._initSourceHandler(), this._addListeners(), this.options.videoUrl && this.load(this.options.videoUrl);
+    }, this.displayMode = "time", Ka(), this.videoSource = null, this.sourceHandler = null, this.canvas = null, this.ctx = null, this.animationFrameId = null, this.isMuted = !1, this.isPlaying = !1, this._drawFrame = this._drawFrame.bind(this), this._handleResize = this._handleResize.bind(this), this._buildUI(), this._initSourceHandler(), this._addListeners(), this.options.videoUrl && this.load(this.options.videoUrl);
   }
   _initSourceHandler() {
     this.options.strategy === "mse" || this.options.videoUrl && this.options.videoUrl.endsWith(".m3u8") ? this.sourceHandler = new jd(this.videoSource) : this.sourceHandler = new qd(this.videoSource);
@@ -21805,10 +21808,12 @@ class zd {
   _buildUI() {
     this.container.innerHTML = "", this.container.classList.add("cvp-container"), this.wrapper = document.createElement("div"), this.wrapper.className = `cvp-wrapper ${this.options.styleConfig.wrapper || ""}`, this.canvas = document.createElement("canvas"), this.canvas.className = `cvp-canvas ${this.options.styleConfig.canvas || ""}`, this.ctx = this.canvas.getContext("2d"), this.videoSource = document.createElement("video"), this.videoSource.style.display = "none", this.videoSource.playsInline = !0, this.videoSource.crossOrigin = "anonymous", this.controlsContainer = document.createElement("div"), this.options.controlsLayout === "outside" ? this.controlsContainer.className = `cvp-controls-outside ${this.options.styleConfig.controls || ""}` : this.controlsContainer.className = `cvp-controls-overlay ${this.options.styleConfig.controls || ""}`;
     const e = document.createElement("div");
-    e.className = "cvp-controls-row", this.playBtn = this._createBtn(rt.play(), "Play"), this.pauseBtn = this._createBtn(rt.pause(), "Pause"), this.pauseBtn.classList.add("cvp-hidden"), this.stopBtn = this._createBtn(rt.stop(), "Stop"), this.timeDisplay = document.createElement("div"), this.timeDisplay.className = "cvp-time", this.timeDisplay.textContent = "0:00 / 0:00", this.timeline = document.createElement("input"), this.timeline.type = "range", this.timeline.className = "cvp-slider", this.timeline.style.flexGrow = "1", this.timeline.min = 0, this.timeline.value = 0, this.timeline.step = 0.1, this.muteBtn = this._createBtn(rt.volume(), "Mute"), this.unmuteBtn = this._createBtn(rt.volumeMute(), "Unmute"), this.unmuteBtn.classList.add("cvp-hidden"), this.volumeSlider = document.createElement("input"), this.volumeSlider.type = "range", this.volumeSlider.className = "cvp-slider", this.volumeSlider.style.width = "80px", this.volumeSlider.min = 0, this.volumeSlider.max = 1, this.volumeSlider.step = 0.1, this.volumeSlider.value = 1, this.fsBtn = this._createBtn(rt.fullscreen(), "Fullscreen"), this.fsExitBtn = this._createBtn(rt.fullscreenExit(), "Exit Fullscreen"), this.fsExitBtn.classList.add("cvp-hidden"), e.append(
+    e.className = "cvp-controls-row", this.stepBackwardBtn = this._createBtn(He.stepBackward(), "Step Backward"), this.playBtn = this._createBtn(He.play(), "Play"), this.pauseBtn = this._createBtn(He.pause(), "Pause"), this.pauseBtn.classList.add("cvp-hidden"), this.stopBtn = this._createBtn(He.stop(), "Stop"), this.stepForwardBtn = this._createBtn(He.stepForward(), "Step Forward"), this.timeDisplay = document.createElement("button"), this.timeDisplay.className = "cvp-time cvp-btn-text", this.timeDisplay.style.cursor = "pointer", this.timeDisplay.title = "Click to toggle time/frames", this.timeDisplay.textContent = "0:00 / 0:00", this.timeline = document.createElement("input"), this.timeline.type = "range", this.timeline.className = "cvp-slider", this.timeline.style.flexGrow = "1", this.timeline.min = 0, this.timeline.value = 0, this.timeline.step = 0.1, this.muteBtn = this._createBtn(He.volume(), "Mute"), this.unmuteBtn = this._createBtn(He.volumeMute(), "Unmute"), this.unmuteBtn.classList.add("cvp-hidden"), this.volumeSlider = document.createElement("input"), this.volumeSlider.type = "range", this.volumeSlider.className = "cvp-slider", this.volumeSlider.style.width = "80px", this.volumeSlider.min = 0, this.volumeSlider.max = 1, this.volumeSlider.step = 0.1, this.volumeSlider.value = 1, this.fsBtn = this._createBtn(He.fullscreen(), "Fullscreen"), this.fsExitBtn = this._createBtn(He.fullscreenExit(), "Exit Fullscreen"), this.fsExitBtn.classList.add("cvp-hidden"), e.append(
+      this.stepBackwardBtn,
       this.playBtn,
       this.pauseBtn,
       this.stopBtn,
+      this.stepForwardBtn,
       this.timeDisplay,
       this.timeline,
       this.muteBtn,
@@ -21823,10 +21828,22 @@ class zd {
     return s.className = `cvp-btn ${this.options.styleConfig.button || ""}`, s.ariaLabel = t, s.appendChild(e), s;
   }
   _addListeners() {
-    this.playBtn.onclick = () => this.play(), this.pauseBtn.onclick = () => this.pause(), this.stopBtn.onclick = () => this.stop(), this.videoSource.onplay = () => this._updatePlayState(!0), this.videoSource.onpause = () => this._updatePlayState(!1), this.videoSource.onended = () => this._updatePlayState(!1), this.videoSource.ontimeupdate = () => {
+    this.stepBackwardBtn.onclick = () => this.stepBackward(), this.playBtn.onclick = () => this.play(), this.pauseBtn.onclick = () => this.pause(), this.stopBtn.onclick = () => this.stop(), this.stepForwardBtn.onclick = () => this.stepForward(), this.videoSource.onplay = () => this._updatePlayState(!0), this.videoSource.onpause = () => this._updatePlayState(!1), this.videoSource.onended = () => this._updatePlayState(!1), this.videoSource.ontimeupdate = () => {
       this.isDraggingTimeline || (this.timeline.value = this.videoSource.currentTime, this._updateTimeDisplay());
     }, this.videoSource.onloadedmetadata = () => {
       this.timeline.max = this.videoSource.duration, this._updateTimeDisplay(), this._resizeCanvas();
+    }, this.timeDisplay.onclick = () => this.toggleTimeDisplay(), this.wrapper.tabIndex = 0, this.wrapper.onkeydown = (e) => {
+      switch (e.key) {
+        case "ArrowLeft":
+          e.preventDefault(), this.stepBackward();
+          break;
+        case "ArrowRight":
+          e.preventDefault(), this.stepForward();
+          break;
+        case " ":
+          e.preventDefault(), this.isPlaying ? this.pause() : this.play();
+          break;
+      }
     }, this.videoSource.onseeked = () => {
       this.isPlaying || this._drawFrame(!0);
     }, this.timeline.oninput = () => {
@@ -21859,6 +21876,21 @@ class zd {
   toggleMute() {
     this.videoSource.muted = !this.videoSource.muted, this._updateVolumeState();
   }
+  stepForward() {
+    this.pause(), this.videoSource.currentTime = Math.min(
+      this.videoSource.duration,
+      this.videoSource.currentTime + 1 / this.options.fps
+    );
+  }
+  stepBackward() {
+    this.pause(), this.videoSource.currentTime = Math.max(
+      0,
+      this.videoSource.currentTime - 1 / this.options.fps
+    );
+  }
+  toggleTimeDisplay() {
+    this.displayMode = this.displayMode === "time" ? "frames" : "time", this._updateTimeDisplay();
+  }
   toggleFullscreen() {
     document.fullscreenElement ? document.exitFullscreen() : this.wrapper.requestFullscreen();
   }
@@ -21880,6 +21912,8 @@ class zd {
     this.timeDisplay.textContent = `${this._formatTime(t)} / ${this._formatTime(s)}`;
   }
   _formatTime(e) {
+    if (this.displayMode === "frames")
+      return `${Math.floor(e * this.options.fps)}`;
     const t = Math.floor(e / 60), s = Math.floor(e % 60);
     return `${t}:${s.toString().padStart(2, "0")}`;
   }

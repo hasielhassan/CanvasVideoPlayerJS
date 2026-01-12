@@ -9,6 +9,8 @@ export const Icons = {
     fullscreen: (props = {}) => createSvg('M7 14H5v5h5v-2H7v-3zm-2-4h2V7h3V5H5v5zm12 7h-3v2h5v-5h-2v3zM14 5v2h3v3h2V5h-5z', { ...props, width: 24, height: 24 }),
     fullscreenExit: (props = {}) => createSvg('M5 16h3v3h2v-5H5v2zm3-8H5v2h5V5H8v3zm6 11h2v-3h3v-2h-5v5zm2-11V5h-2v5h5V8h-3z', { ...props, width: 24, height: 24 }),
     stop: (props = {}) => createSvg('M6 6h12v12H6z', { ...props, width: 24, height: 24 }),
+    stepForward: (props = {}) => createSvg('M4 18l8.5-6L4 6v12zm9-12v12l8.5-6L13 6z', { ...props, width: 24, height: 24 }),
+    stepBackward: (props = {}) => createSvg('M11 18V6l-8.5 6 8.5 6zm.5-6l8.5 6V6l-8.5 6z', { ...props, width: 24, height: 24 }),
 };
 
 function createSvg(pathData, { width = 24, height = 24, fill = 'currentColor', className = '' } = {}) {
